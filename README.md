@@ -4,7 +4,7 @@ Cross-platform UI test automation for the Sauce Labs **Swag Labs** demo app, run
 test suite against **Android** and **iOS**.
 
 Built on [Carina](https://github.com/zebrunner/carina) and following the architectural
-conventions of the `mfp-qa` project: a layered `Tests → Services → Pages → Components` structure,
+conventions: a layered `Tests → Services → Pages → Components` structure,
 a properties-backed user pool, and hard assertions on every page transition.
 
 ---
