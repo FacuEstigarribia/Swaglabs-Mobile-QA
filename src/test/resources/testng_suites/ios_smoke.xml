@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite verbose="1" name="Swag Labs - iOS smoke" parallel="false" thread-count="1">
+
+    <!-- Selects src/main/resources/capabilities/ios.properties. -->
+    <parameter name="platform" value="ios"/>
+
+    <listeners>
+        <listener class-name="com.mobile.swaglabs.qa.listener.ScreenshotOnFailureListener"/>
+    </listeners>
+
+    <!-- Covers the iOS-specific risk in two cases: the letterboxed tap and the whole
+         error-state locator set. -->
+    <test name="Swag Labs iOS smoke">
+        <classes>
+            <class name="com.mobile.swaglabs.qa.test.ProductGridTest">
+                <methods><include name="testProductGridDisplaysAllItems"/></methods>
+            </class>
+            <class name="com.mobile.swaglabs.qa.test.LoginValidationTest">
+                <methods><include name="testLoginWithInvalidUsernameIsRejected"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>

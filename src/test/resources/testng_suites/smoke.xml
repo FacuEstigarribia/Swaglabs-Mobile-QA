@@ -1,0 +1,21 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite verbose="1" name="Swag Labs - smoke" parallel="false" thread-count="1">
+
+    <!-- Platform comes from -Dplatform (android by default); see capabilities/*.properties. -->
+    <parameter name="platform" value="android"/>
+    <listeners>
+        <listener class-name="com.mobile.swaglabs.qa.listener.ScreenshotOnFailureListener"/>
+    </listeners>
+
+    <!-- One case per area, for checking the rig quickly. -->
+    <test name="Swag Labs smoke">
+        <classes>
+            <class name="com.mobile.swaglabs.qa.test.ProductGridTest">
+                <methods><include name="testProductGridDisplaysAllItems"/></methods>
+            </class>
+            <class name="com.mobile.swaglabs.qa.test.LoginValidationTest">
+                <methods><include name="testLoginWithInvalidUsernameIsRejected"/></methods>
+            </class>
+        </classes>
+    </test>
+</suite>
