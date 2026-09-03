@@ -57,14 +57,10 @@ Suites live in `src/test/resources/testng_suites/` and are selected with `-Dsuit
 ```bash
 mvn clean test -Dsuite=android   # all 17 cases on Android
 mvn clean test -Dsuite=ios       # all 17 cases on iOS
-mvn clean test -Dsuite=smoke     # two Android cases, for checking the rig
+mvn clean test -Dsuite=smoke     # two Android cases
 mvn clean test -Dsuite=ios_smoke # the same two on iOS
 mvn clean test -Dsuite=cart      # the five cart cases only
 ```
-
-The smoke suites are deliberately chosen: between them, SL-01 and SL-17 exercise scroll-and-collect
-through the component layer, the cart badge, the whole login error state, and — on iOS — the
-letterbox tap offset. If those two pass, the platform plumbing is sound.
 
 Each suite names a `platform`, which selects the matching
 `src/main/resources/capabilities/<platform>.properties`. Carina does not read `capabilities.*`
@@ -78,6 +74,41 @@ mvn clean test -Dsuite=ios -Dcapabilities.udid=<YOUR-SIMULATOR-UDID>
 ```
 
 Failure screenshots are written to `target/screenshots/` and to Carina's report directory.
+
+### Retrying failed tests
+
+A failed test method is re-run up to `retry_count` times. `retry_count` is `0` in
+`_config.properties`, so nothing is retried until you ask for it:
+
+```bash
+mvn clean test -Dsuite=android -Dretry_count=2   # each failing case gets two more chances
+```
+
+The count is resolved most-specific-first: `-Dretry_count=N`, then a
+`<parameter name="retry_count" value="N"/>` in the suite or `<test>` XML, then `_config.properties`.
+
+No test declares `@Test(retryAnalyzer = …)`. `RetryAnalyzerListener` attaches
+`RetryCountAnalyzer` to every method it finds, and TestNG discovers that listener through
+`src/main/resources/META-INF/services/org.testng.ITestNGListener` — so the mechanism covers every
+suite, including ones added later, with no annotation and no suite edit. While `retry_count` is `0`
+the listener attaches nothing at all.
+
+Attempts are counted per *invocation* — class, method, and parameters — in a concurrent map, so each
+data-provider row keeps its own budget and parallel threads cannot corrupt each other's count.
+Because `driver_mode=method_mode`, a retried mobile test gets a freshly launched app, and
+`SwagLabsBaseTest` releases and re-leases its user, so the retry is genuinely independent.
+
+`src/test/resources/testng_suites/retry_demo.xml` demonstrates the logic without a device:
+
+```bash
+mvn clean test -Dsuite=retry_demo -Dthread_count=4 -Ddata_provider_thread_count=3
+```
+
+`RetryAnalyzerDemoTest` holds primitive tests that fail on purpose — one that passes on its retry,
+one that never passes, one that passes first time, and a three-row data provider whose rows each
+recover independently. **The suite is meant to end red:** the always-failing case is what proves the
+budget runs out. The two `-D` flags are needed because `CarinaListener` rewrites a suite's
+`thread-count` from `thread_count`, which is `1` for the device suites.
 
 ## Project structure
 
@@ -96,11 +127,15 @@ src/main/java/com/mobile/swaglabs/qa/
 ├── pages/ios/                          @DeviceType(IOS_PHONE) implementations
 ├── components/common/                  ProductCard (AbstractUIObject)
 ├── util/                               ColorUtil — pixel sampling for colour assertions
-└── listener/                           ScreenshotOnFailureListener
+├── listener/                           ScreenshotOnFailureListener
+└── retry/                              RetryCountAnalyzer + the listener that attaches it
 src/main/resources/                     _config.properties, _testdata.properties, log4j2.xml
 src/main/resources/capabilities/        android.properties, ios.properties
+src/main/resources/META-INF/services/   TestNG listener registration for the retry logic
 src/test/java/.../test/                 The five test classes
-src/test/resources/testng_suites/       android.xml, ios.xml, smoke.xml, ios_smoke.xml, cart.xml
+src/test/java/.../retry/                RetryAnalyzerDemoTest — deliberate failures, no device
+src/test/resources/testng_suites/       android.xml, ios.xml, smoke.xml, ios_smoke.xml, cart.xml,
+                                        ios_cart.xml, retry_demo.xml
 ```
 
 ### Layering

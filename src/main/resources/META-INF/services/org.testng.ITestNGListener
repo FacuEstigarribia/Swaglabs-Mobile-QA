@@ -1,0 +1,3 @@
+# TestNG loads this itself, so the retry logic applies to every suite with no suite XML edit.
+# Carina registers CarinaListenerChain through its own copy of this file; both are picked up.
+com.mobile.swaglabs.qa.retry.RetryAnalyzerListener

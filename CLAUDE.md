@@ -17,6 +17,7 @@ mvn clean test -Dsuite=smoke        # SL-01 + SL-17 on Android — checks the ri
 mvn clean test -Dsuite=ios_smoke    # the same two on iOS
 mvn clean test -Dsuite=cart         # CartTest on Android
 mvn clean test -Dsuite=ios_cart     # CartTest on iOS
+mvn clean test -Dsuite=retry_demo -Dthread_count=4 -Ddata_provider_thread_count=3   # retry logic, no device
 python3 docs/generate_readme_cases.py   # after editing docs/test-cases.csv
 ```
 
@@ -77,6 +78,16 @@ Worth knowing before changing configuration, because it is spread across four fi
 - **Driver lifecycle.** `driver_mode=method_mode`, so Carina relaunches the app per test *method*:
   every test starts with an empty cart and no session, which is what makes rule 1 cheap. It is
   *not* per data-provider invocation — SL-16 logs out explicitly between users for that reason.
+- **Retries.** `retry/RetryCountAnalyzer` (an `IRetryAnalyzer`) re-runs a failed method up to
+  `retry_count` times; `retry/RetryAnalyzerListener` attaches it to every method in
+  `onStart(ITestContext)`, so no `@Test` names an analyzer. That listener is registered in
+  `src/main/resources/META-INF/services/org.testng.ITestNGListener`, i.e. TestNG finds it by itself
+  and the logic covers every suite including new ones. Count resolution is `-Dretry_count=N` >
+  suite/`<test>` XML parameter > `_config.properties` (`0`, so retrying is off by default and the
+  listener then attaches nothing). Attempts are counted in a static `ConcurrentMap` keyed by class +
+  method + parameters, not in an instance field, so parallel threads and data-provider rows each get
+  their own budget regardless of how many analyzer instances TestNG decides to create.
+  `retry_demo.xml` + `RetryAnalyzerDemoTest` exercise it with no device and are *meant to end red*.
 - **Users.** `_testdata.properties` declares pools (`::`-separated member keys, each resolving to
   `<key>.login` / `<key>.password`). The `UserPool` enum implements `UserProvider`, so a pool
   constant goes straight into `getLoginService().login(VALID_USERS_POOL)`. `UsersPool.getUser()`
@@ -145,3 +156,14 @@ Worth knowing before changing configuration, because it is spread across four fi
   throwing when a screenshot cannot be read.
 - **Appium caches its driver list at startup.** A driver installed after the server started is
   invisible to it until the server restarts.
+- **TestNG 7.8 holds exactly one `IAnnotationTransformer`.** `TestNG.setAnnotationTransformer`
+  drops a second registration with nothing but an `"AnnotationTransformer already set"` warning, and
+  Carina's `CarinaListenerChain` already is one — registered, like ours, through the service loader,
+  so jar order would decide the winner. That is why retry analyzers are attached from an
+  `ITestListener` (TestNG keeps a *list* of those) via `ITestNGMethod.setRetryAnalyzerClass`, and not
+  by rewriting the `@Test` annotation. **Do not add an `IAnnotationTransformer` to this project**
+  without checking it is the only one.
+- **`CarinaListener` overwrites a suite's `thread-count`.** It rewrites `thread-count` and
+  `data-provider-thread-count` from `thread_count` / `data_provider_thread_count` in
+  `_config.properties`, both `1` here, so declaring them in a suite XML has no effect. A suite that
+  really wants parallelism has to be run with `-Dthread_count=N` — see the `retry_demo` command.
