@@ -18,7 +18,15 @@
         <slf4j.version>1.7.30</slf4j.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M4</maven-surefire-plugin.version>
-        <!-- Default suite; override with -Dsuite=ios or -Dsuite=regression -->
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <!-- Allure adapter. 2.25.0 is the last release built against slf4j-api 1.7.x, which is
+             what log4j-slf4j-impl binds here; 2.29+ moves to slf4j 2.x and would leave the API and
+             the binding mismatched. Do not bump without switching to log4j-slf4j2-impl. -->
+        <allure.version>2.25.0</allure.version>
+        <!-- allure-maven 3.x is compiled to Java 17 bytecode and cannot run on this project's
+             JDK 11. 2.18.0 is the newest Java 8 build. -->
+        <allure-maven.version>2.18.0</allure-maven.version>
+        <!-- Default suite; override with -Dsuite=regression, -Dsuite=ios, -Dsuite=cart, ... -->
         <suite>android</suite>
     </properties>
 
@@ -70,6 +78,23 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>${allure.version}</version>
+            <exclusions>
+                <!-- allure-testng declares TestNG 6.14.3, and as a direct dependency that sits
+                     nearer than Carina's 7.8.0 - so without this exclusion Maven quietly downgrades
+                     TestNG for the whole project and org.testng.internal.annotations
+                     .DisabledRetryAnalyzer (7.x only, used by RetryAnalyzerListener) stops
+                     compiling. The adapter itself only touches listener APIs that are unchanged
+                     between 6.14 and 7.8. -->
+                <exclusion>
+                    <groupId>org.testng</groupId>
+                    <artifactId>testng</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <build>
@@ -83,15 +108,62 @@
                 </configuration>
             </plugin>
 
+            <!-- Seeds categories.json into the results directory before the tests run, so the
+                 failure buckets exist for every suite - including retry_demo, whose test class does
+                 not extend SwagLabsBaseTest and so never reaches the runtime writer there. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>allure-categories</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/allure-results</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources/allure</directory>
+                                    <includes>
+                                        <include>categories.json</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
+                    <systemPropertyVariables>
+                        <!-- Without this allure-maven defaults to ${project.basedir}/allure-results,
+                             i.e. the repo root, which .gitignore does not cover. -->
+                        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                    </systemPropertyVariables>
                     <suiteXmlFiles>
                         <suiteXmlFile>${project.build.directory}/test-classes/testng_suites/${suite}.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                </configuration>
+            </plugin>
+            <!-- Report generation: `mvn allure:serve` (opens a browser) or `mvn allure:report`
+                 (static HTML in target/allure-report). The plugin downloads the Allure
+                 commandline itself, so nothing has to be installed on the machine. -->
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>${allure-maven.version}</version>
+                <configuration>
+                    <reportVersion>${allure.version}</reportVersion>
+                    <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+                    <reportDirectory>${project.build.directory}/allure-report</reportDirectory>
                 </configuration>
             </plugin>
         </plugins>

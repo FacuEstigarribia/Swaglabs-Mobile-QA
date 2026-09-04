@@ -53,8 +53,11 @@ public class RetryCountAnalyzer implements IRetryAnalyzer, IConstants {
 
     /**
      * Number of retries a failed test is allowed.
+     *
+     * <p>Public because {@code SwagLabsBaseTest} records the effective count in the Allure
+     * environment file, and that must show the same number this analyzer will actually use.
      */
-    static int resolveMaxRetries(ITestContext context) {
+    public static int resolveMaxRetries(ITestContext context) {
         Integer fromCommandLine = parse(System.getProperty(RETRY_COUNT), "the command line");
         if (fromCommandLine != null) {
             return fromCommandLine;

@@ -1,3 +1,5 @@
-# TestNG loads this itself, so the retry logic applies to every suite with no suite XML edit.
+# TestNG loads this itself, so the logic applies to every suite with no suite XML edit.
 # Carina registers CarinaListenerChain through its own copy of this file; both are picked up.
+# Allure's own AllureTestNg is registered the same way, from a copy inside allure-testng.jar.
 com.mobile.swaglabs.qa.retry.RetryAnalyzerListener
+com.mobile.swaglabs.qa.listener.AllureAdapterListener

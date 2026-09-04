@@ -55,12 +55,24 @@ The first iOS run builds WebDriverAgent, which takes several minutes; later runs
 Suites live in `src/test/resources/testng_suites/` and are selected with `-Dsuite=`.
 
 ```bash
-mvn clean test -Dsuite=android   # all 17 cases on Android
-mvn clean test -Dsuite=ios       # all 17 cases on iOS
-mvn clean test -Dsuite=smoke     # two Android cases
-mvn clean test -Dsuite=ios_smoke # the same two on iOS
-mvn clean test -Dsuite=cart      # the five cart cases only
+# Regression - the full 17 cases
+mvn clean test -Dsuite=regression       
+mvn clean test -Dsuite=ios_regression   
+
+# Smoke - two cases, enough to prove the rig works
+mvn clean test -Dsuite=smoke
+mvn clean test -Dsuite=ios_smoke
+
+# Features - one area at a time, for iterating without a full-suite cycle
+mvn clean test -Dsuite=grid      
+mvn clean test -Dsuite=filter    
+mvn clean test -Dsuite=cart       
+mvn clean test -Dsuite=account    
+mvn clean test -Dsuite=login      
 ```
+
+Every feature suite has an iOS twin: `ios_grid`, `ios_filter`, `ios_cart`, `ios_account`,
+`ios_login`.
 
 Each suite names a `platform`, which selects the matching
 `src/main/resources/capabilities/<platform>.properties`. Carina does not read `capabilities.*`
@@ -73,7 +85,36 @@ mvn clean test -Dsuite=android -Dcapabilities.deviceName=emulator-5556
 mvn clean test -Dsuite=ios -Dcapabilities.udid=<YOUR-SIMULATOR-UDID>
 ```
 
-Failure screenshots are written to `target/screenshots/` and to Carina's report directory.
+## Reports
+
+The suite produces an [Allure](https://allurereport.org/) report. Nothing has to be installed:
+the Maven plugin fetches the Allure commandline itself on first use.
+
+```bash
+mvn clean test -Dsuite=regression   # writes target/allure-results/
+mvn allure:serve                    # builds the report and opens it in a browser
+mvn allure:report                   # or: static HTML in target/allure-report/
+```
+
+What the report gives you, all of it derived from metadata the tests already declare:
+
+| Tab | Shows |
+|---|---|
+| **Behaviors** | Cases grouped by feature - Product Grid, Filtering, Cart, Account, Login - read from `@TestTag(name = "feature")`. This is the view to open after a regression run. |
+| **Suites** | Grouped by platform, so an Android and an iOS run stay distinguishable side by side. |
+| **Categories** | Failures bucketed by cause. *Driver / session lost* separates a dropped UiAutomator2 instrumentation from a genuine *Assertion failed* - the two look identical in a flat list. |
+| **Retries** | Every attempt when a test is re-run with `-Dretry_count=N`. |
+
+Each test shows its owner, a severity taken from `@TestPriority`, its `SL-nn` tag with a link to the
+matching case in `docs/test-cases.md`, and a step list built from the log lines the pages and
+services already emit (`Adding 'Sauce Labs Backpack' to the cart.`). A failing test carries a
+screenshot of the screen as it was when it failed.
+
+The Environment panel records which device, Appium server and app build the run actually used, plus
+the effective `retry_count`.
+
+Failure screenshots are also written to `target/screenshots/` and to Carina's report directory,
+independently of Allure.
 
 ### Retrying failed tests
 
@@ -81,7 +122,7 @@ A failed test method is re-run up to `retry_count` times. `retry_count` is `0` i
 `_config.properties`, so nothing is retried until you ask for it:
 
 ```bash
-mvn clean test -Dsuite=android -Dretry_count=2   # each failing case gets two more chances
+mvn clean test -Dsuite=android -Dretry_count=2   
 ```
 
 The count is resolved most-specific-first: `-Dretry_count=N`, then a

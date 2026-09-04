@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite verbose="1" name="Swag Labs - Android filter" parallel="false" thread-count="1">
+
+    <!-- Selects src/main/resources/capabilities/android.properties. -->
+    <parameter name="platform" value="android"/>
+
+    <listeners>
+        <listener class-name="com.mobile.swaglabs.qa.listener.ScreenshotOnFailureListener"/>
+    </listeners>
+
+    <!-- Filtering feature only (SL-05..SL-08), for iterating without a full-suite cycle. -->
+    <test name="Swag Labs filter">
+        <classes>
+            <class name="com.mobile.swaglabs.qa.test.ProductFilterTest"/>
+        </classes>
+    </test>
+</suite>

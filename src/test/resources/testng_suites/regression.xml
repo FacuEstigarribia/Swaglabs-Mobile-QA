@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite verbose="1" name="Swag Labs - Android regression" parallel="false" thread-count="1"
+       configfailurepolicy="continue">
+
+    <!-- Selects src/main/resources/capabilities/android.properties. -->
+    <parameter name="platform" value="android"/>
+
+    <listeners>
+        <listener class-name="com.mobile.swaglabs.qa.listener.ScreenshotOnFailureListener"/>
+    </listeners>
+
+    <!-- Full regression: all 17 cases. Same content as android.xml,
+         which is kept because the README and CLAUDE.md document -Dsuite=android. -->
+    <test name="Swag Labs regression">
+        <classes>
+            <class name="com.mobile.swaglabs.qa.test.ProductGridTest"/>
+            <class name="com.mobile.swaglabs.qa.test.ProductFilterTest"/>
+            <class name="com.mobile.swaglabs.qa.test.CartTest"/>
+            <class name="com.mobile.swaglabs.qa.test.AccountTest"/>
+            <class name="com.mobile.swaglabs.qa.test.LoginValidationTest"/>
+        </classes>
+    </test>
+</suite>

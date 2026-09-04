@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Driver / session lost",
+    "matchedStatuses": ["broken", "failed"],
+    "traceRegex": ".*(SessionNotCreated|UnreachableBrowser|NoSuchDriver|instrumentation process is not running|WebDriverAgent).*"
+  },
+  {
+    "name": "Page did not open",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*(page did not open|should not be open).*"
+  },
+  {
+    "name": "Element not found",
+    "matchedStatuses": ["broken", "failed"],
+    "traceRegex": ".*(NoSuchElementException|StaleElementReferenceException|TimeoutException).*"
+  },
+  {
+    "name": "Assertion failed",
+    "matchedStatuses": ["failed"],
+    "traceRegex": ".*AssertionError.*"
+  },
+  {
+    "name": "Test defect",
+    "matchedStatuses": ["broken"]
+  }
+]

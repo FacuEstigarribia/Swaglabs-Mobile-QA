@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<!-- packages= makes the AllureStep appender discoverable without depending on log4j2's
+     annotation processor having run during compilation. -->
+<Configuration status="WARN" packages="com.mobile.swaglabs.qa.listener">
     <Properties>
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{1.} - %msg%n</Property>
         <Property name="LOG_DIR">target/logs</Property>
@@ -12,10 +14,18 @@
         <File name="File" fileName="${LOG_DIR}/test.log" append="false">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </File>
+        <!-- Mirrors this project's own log lines into the Allure report as steps. A line logged
+             outside a running test is dropped rather than recorded. -->
+        <AllureStep name="AllureStep"/>
     </Appenders>
 
     <Loggers>
         <Logger name="com.mobile.swaglabs.qa" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="AllureStep" level="INFO"/>
+        </Logger>
+        <Logger name="com.mobile.swaglabs.qa.listener" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="File"/>
         </Logger>
