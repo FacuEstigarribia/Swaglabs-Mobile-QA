@@ -28,27 +28,6 @@ import io.qameta.allure.model.Link;
 import io.qameta.allure.model.TestResult;
 import io.qameta.allure.util.ResultsUtils;
 
-/**
- * Feeds Allure the metadata every test in this project already declares.
- *
- * <p>The suite annotates each {@code @Test} with {@link MethodOwner}, {@link TestPriority} and two
- * {@link TestTag}s ({@code tcId} and {@code feature}). Those are Zebrunner's annotations, which
- * Allure knows nothing about — so rather than adding a second, parallel set of Allure annotations
- * to all 17 methods, this listener reads the existing ones reflectively and translates them.
- * Adding a test therefore needs no reporting-specific work at all.
- *
- * <p>Registered in {@code src/main/resources/META-INF/services/org.testng.ITestNGListener}, which
- * covers every suite including {@code retry_demo.xml} - the one file with no {@code <listeners>}
- * block.
- *
- * <p><b>Why {@code afterInvocation} and not {@code onTestFailure}.</b> Allure's own
- * {@code AllureTestNg} closes a test case from its {@code ITestListener} callbacks, and the relative
- * order of two {@code ITestListener}s found by the service loader is unspecified — so writing labels
- * from {@code onTestFailure} would be a race that silently drops them. TestNG runs every
- * {@code IInvokedMethodListener.afterInvocation} before those callbacks fire, which makes this hook
- * deterministic at both ends: the test case is open because the method has already run, and it has
- * not been stopped yet.
- */
 public class AllureAdapterListener implements IInvokedMethodListener, IDriverPool {
 
     private static final Logger LOGGER = LogManager.getLogger(MethodHandles.lookup().lookupClass());
@@ -169,10 +148,6 @@ public class AllureAdapterListener implements IInvokedMethodListener, IDriverPoo
 
     /**
      * Attaches the failing screen to the report.
-     *
-     * <p>Separate from {@link ScreenshotOnFailureListener}, which keeps writing PNGs to
-     * {@code target/screenshots/} from {@code onTestFailure}. Keeping the two paths independent
-     * costs one extra capture on a failing test and means neither reporter can break the other.
      */
     private void attachScreenshot(AllureLifecycle lifecycle) {
         // Carina's getDriver() *starts* a session when the thread has none, so a driverless suite

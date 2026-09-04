@@ -22,18 +22,6 @@ import io.qameta.allure.model.StepResult;
 
 /**
  * Turns this project's own log lines into Allure report steps.
- *
- * <p>The pages and services already narrate what they do — {@code "Adding 'Sauce Labs Backpack' to
- * the cart."}, {@code "Opening the cart."} — so the step text is written already. Bridging the log
- * is therefore what gives the report a readable step list without annotating a single test or page
- * method, and without the AspectJ weaver that Allure's {@code @Step} annotation would require.
- *
- * <p>Wired in {@code log4j2.xml} against the {@code com.mobile.swaglabs.qa} logger only, at INFO.
- * Carina's own logger is deliberately left off: its output is framework noise, not test narration.
- *
- * <p>Each event becomes a step that is started and immediately stopped, which renders as a flat,
- * ordered list. Allure keeps the current test case in a thread local, so a log line always lands on
- * the test that emitted it even when a suite runs several threads.
  */
 @Plugin(name = AllureStepAppender.PLUGIN_NAME, category = Core.CATEGORY_NAME,
         elementType = Appender.ELEMENT_TYPE, printObject = true)
