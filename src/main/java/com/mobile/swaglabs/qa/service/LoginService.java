@@ -30,9 +30,6 @@ public class LoginService implements IDriverPool, ICustomTypePageFactory, IConst
 
     /**
      * Logs in with a user from {@code provider}.
-     *
-     * <p>Accepts a {@code UserPool} constant directly, so a test reads
-     * {@code getLoginService().login(VALID_USERS_POOL)}.
      */
     public ProductsPage login(UserProvider provider) {
         return login(provider.getUser());

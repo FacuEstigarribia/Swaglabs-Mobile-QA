@@ -7,6 +7,10 @@ target/
 target/screenshots/
 target/logs/
 target/reports/
+target/allure-results/
+target/allure-report/
+# Where allure-maven unpacks the Allure commandline it downloads.
+.allure/
 
 ### IntelliJ IDEA ###
 .idea/

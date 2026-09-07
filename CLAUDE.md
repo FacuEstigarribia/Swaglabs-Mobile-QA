@@ -11,13 +11,15 @@ a real device or simulator through a local Appium server at `http://localhost:47
 ## Commands
 
 ```bash
-mvn clean test -Dsuite=android      # all 17 cases, Android
-mvn clean test -Dsuite=ios          # all 17 cases, iOS
-mvn clean test -Dsuite=smoke        # SL-01 + SL-17 on Android — checks the rig
-mvn clean test -Dsuite=ios_smoke    # the same two on iOS
-mvn clean test -Dsuite=cart         # CartTest on Android
-mvn clean test -Dsuite=ios_cart     # CartTest on iOS
-python3 docs/generate_readme_cases.py   # after editing docs/test-cases.csv
+mvn clean test -Dsuite=regression   
+mvn clean test -Dsuite=ios_regression  
+mvn clean test -Dsuite=smoke        
+mvn clean test -Dsuite=ios_smoke    
+mvn clean test -Dsuite=grid         
+mvn clean test -Dsuite=ios_grid 
+mvn allure:serve                   
+mvn clean test -Dsuite=retry_demo -Dthread_count=4 -Ddata_provider_thread_count=3  
+python3 docs/generate_readme_cases.py   
 ```
 
 `-Dsuite=X` selects `src/test/resources/testng_suites/X.xml`; the default is `android` (`pom.xml`).
@@ -33,7 +35,8 @@ Stop a run with `pkill -f ForkedBooter` (the surefire JVM is named `ForkedBooter
 `pkill -f surefire` does *not* match it). Killing a run mid-flight orphans the Appium session; see
 the README for recovering a wedged UiAutomator2 server.
 
-Artifacts: `target/screenshots/` (failure PNGs), `target/logs/test.log`, `target/reports/`.
+Artifacts: `target/screenshots/` (failure PNGs), `target/logs/test.log`, `target/reports/`,
+`target/allure-results/` (+ `target/allure-report/` after `mvn allure:report`).
 
 ## Layering
 
@@ -77,6 +80,26 @@ Worth knowing before changing configuration, because it is spread across four fi
 - **Driver lifecycle.** `driver_mode=method_mode`, so Carina relaunches the app per test *method*:
   every test starts with an empty cart and no session, which is what makes rule 1 cheap. It is
   *not* per data-provider invocation — SL-16 logs out explicitly between users for that reason.
+- **Retries.** `retry/RetryCountAnalyzer` (an `IRetryAnalyzer`) re-runs a failed method up to
+  `retry_count` times; `retry/RetryAnalyzerListener` attaches it to every method in
+  `onStart(ITestContext)`, so no `@Test` names an analyzer. That listener is registered in
+  `src/main/resources/META-INF/services/org.testng.ITestNGListener`, i.e. TestNG finds it by itself
+  and the logic covers every suite including new ones. Count resolution is `-Dretry_count=N` >
+  suite/`<test>` XML parameter > `_config.properties` (`0`, so retrying is off by default and the
+  listener then attaches nothing). Attempts are counted in a static `ConcurrentMap` keyed by class +
+  method + parameters, not in an instance field, so parallel threads and data-provider rows each get
+  their own budget regardless of how many analyzer instances TestNG decides to create.
+  `retry_demo.xml` + `RetryAnalyzerDemoTest` exercise it with no device and are *meant to end red*.
+- **Allure reporting.** Three pieces, none of which touch a test class. `allure-testng` registers
+  itself through its own copy of the `META-INF/services/org.testng.ITestNGListener` file, so it is
+  active in every suite. `listener/AllureStepAppender` is a log4j2 appender wired to the
+  `com.mobile.swaglabs.qa` logger at INFO in `log4j2.xml`, turning the pages' and services' existing
+  `LOGGER.info` narration into report steps — which is why no `@Step` annotation and no AspectJ
+  weaver exist here. `listener/AllureAdapterListener` reads `@TestTag`/`@TestPriority`/`@MethodOwner`
+  reflectively and translates them into Allure's feature/severity/owner/tag labels, so new tests need
+  no reporting-specific annotations at all. `categories.json` is copied into the results directory by
+  `maven-resources-plugin`; `environment.properties` is written by `SwagLabsBaseTest` once the
+  capabilities are loaded.
 - **Users.** `_testdata.properties` declares pools (`::`-separated member keys, each resolving to
   `<key>.login` / `<key>.password`). The `UserPool` enum implements `UserProvider`, so a pool
   constant goes straight into `getLoginService().login(VALID_USERS_POOL)`. `UsersPool.getUser()`
@@ -145,3 +168,36 @@ Worth knowing before changing configuration, because it is spread across four fi
   throwing when a screenshot cannot be read.
 - **Appium caches its driver list at startup.** A driver installed after the server started is
   invisible to it until the server restarts.
+- **TestNG 7.8 holds exactly one `IAnnotationTransformer`.** `TestNG.setAnnotationTransformer`
+  drops a second registration with nothing but an `"AnnotationTransformer already set"` warning, and
+  Carina's `CarinaListenerChain` already is one — registered, like ours, through the service loader,
+  so jar order would decide the winner. That is why retry analyzers are attached from an
+  `ITestListener` (TestNG keeps a *list* of those) via `ITestNGMethod.setRetryAnalyzerClass`, and not
+  by rewriting the `@Test` annotation. **Do not add an `IAnnotationTransformer` to this project**
+  without checking it is the only one.
+- **Allure's version choice is constrained twice, and both fail confusingly.** `allure-maven` 3.x
+  is compiled to **Java 17** bytecode and simply cannot run on this project's JDK 11 — hence the pin
+  to `2.18.0`. And `allure-testng` 2.29+ moves to **slf4j 2.x**, which does not match the
+  `log4j-slf4j-impl` (slf4j 1.7) binding used here; `2.25.0` is the last release on slf4j 1.7.x.
+  Both pins carry a comment in `pom.xml`. Do not bump either without re-checking those two things.
+- **`allure-testng` drags in TestNG 6.14.3 and wins.** It declares its own `org.testng:testng`
+  dependency, and as a *direct* dependency that sits nearer than Carina's 7.8.0 — so Maven silently
+  downgrades TestNG for the whole project and `RetryAnalyzerListener` stops compiling on
+  `org.testng.internal.annotations.DisabledRetryAnalyzer` (7.x only). `pom.xml` excludes it.
+- **Report metadata must be written from `afterInvocation`, not `onTestFailure`.** Allure closes a
+  test case from its own `ITestListener` callbacks, and the order of two `ITestListener`s found by
+  the service loader is unspecified — labels and attachments written from `onTestFailure` are a race
+  that silently loses them. TestNG runs every `IInvokedMethodListener.afterInvocation` first, which
+  is deterministic at both ends.
+- **`IDriverPool.getDriver()` *starts* a session when the thread has none.** Calling it from a
+  reporting path means a driverless suite (`retry_demo`) tries to open an Appium session just to
+  report a failure — it cost 30s per failed test before `AllureAdapterListener` was made to check
+  `isDriverRegistered(...)` first.
+- **Keep the reporting classes out of the step bridge.** The appender is scoped to
+  `com.mobile.swaglabs.qa`, which includes the listeners themselves, so without a dedicated
+  `com.mobile.swaglabs.qa.listener` logger in `log4j2.xml` a line like *"Could not attach a failure
+  screenshot"* shows up in the report as a test step.
+- **`CarinaListener` overwrites a suite's `thread-count`.** It rewrites `thread-count` and
+  `data-provider-thread-count` from `thread_count` / `data_provider_thread_count` in
+  `_config.properties`, both `1` here, so declaring them in a suite XML has no effect. A suite that
+  really wants parallelism has to be run with `-Dthread_count=N` — see the `retry_demo` command.
