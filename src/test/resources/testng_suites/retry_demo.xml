@@ -2,6 +2,10 @@
 <suite verbose="1" name="SwagLabs-retryDemo" parallel="methods" thread-count="4"
        data-provider-thread-count="3">
 
+    <listeners>
+        <listener class-name="com.zebrunner.agent.testng.listener.TestRunListener"/>
+    </listeners>
+
     <parameter name="retry_count" value="2"/>
 
     <!-- Zebrunner launcher metadata. This is the only suite here that drives no device, so
