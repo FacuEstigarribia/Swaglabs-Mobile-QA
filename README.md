@@ -78,6 +78,12 @@ Each suite names a `platform`, which selects the matching
 `src/main/resources/capabilities/<platform>.properties`. Carina does not read `capabilities.*`
 from TestNG suite parameters, so `SwagLabsBaseTest` loads that file in `@BeforeSuite`.
 
+That file holds only capabilities that are true anywhere. Which device to drive comes from
+`capabilities/<platform>-local.properties` — `deviceName` for Android, plus `udid` and
+`platformVersion` for iOS — and it is applied only when no device farm is serving the run. Point the
+suite at a different emulator or simulator by editing that file once, rather than passing `-D` flags
+every time.
+
 Any capability can be overridden on the command line, which wins over the file:
 
 ```bash
@@ -151,12 +157,84 @@ recover independently. **The suite is meant to end red:** the always-failing cas
 budget runs out. The two `-D` flags are needed because `CarinaListener` rewrites a suite's
 `thread-count` from `thread_count`, which is `1` for the device suites.
 
+## Zebrunner
+
+The suite reports to [Zebrunner](https://solvdinternal.zebrunner.com/projects/SAUCEM) and its 17
+cases live there as test cases. No extra dependency is involved: `carina-core` already brings
+`com.zebrunner:agent-core`, so this is configuration only.
+
+### Reporting a run
+
+`src/main/resources/agent.properties` carries the hostname and `reporting.project-key=SAUCEM`, and
+leaves reporting **off** so a local run stays local. The access token is a credential and is not in
+the repository:
+
+```bash
+export REPORTING_SERVER_ACCESS_TOKEN=<token from Zebrunner > Account & Profile>
+mvn clean test -Dsuite=smoke -Dreporting.enabled=true
+```
+
+### Test cases
+
+`docs/test-cases.csv` stays the source of truth. The importer takes a different shape, so it is
+generated rather than maintained by hand:
+
+```bash
+python3 docs/generate_zebrunner_import.py   # writes docs/zebrunner-test-cases.csv
+```
+
+Upload the result on the project's **Test Cases** page (*Import > CSV*). The mapping it applies:
+
+| `test-cases.csv` | Zebrunner |
+|---|---|
+| `Title`, prefixed with `TC_ID` | `Title` — Zebrunner assigns its own `SAUCEM-nn` keys, so `SL-nn` is kept in the title to stay searchable |
+| `Area` | `Suite`, nested as `Swag Labs Mobile > <Area>` (missing suites are created on import) |
+| `Precondition` | `Pre-conditions` |
+| `Priority` | `Priority` — `P1`/`P2` verbatim; unknown values are created on import |
+| `Action` (+ `Test Data` inlined) | `Step`, one per row |
+| `Expected Result` | `Expected Result` |
+| `Platform`, `Automated Method`, `TC_ID` | folded into `Description` — the importer ignores columns it does not recognise |
+
+Once the cases exist, add `@TestCaseKey("SAUCEM-nn")` to each `@Test` so results land against them.
+
+### Launchers
+
+Register the repository on Zebrunner's **Launchers** page. The scan generates one job per TestNG
+suite XML it finds under `src/test/resources/testng_suites/`, and reads the target project from
+`reporting.project-key` in `agent.properties`.
+
+Each suite carries the metadata that shapes its launcher — `jenkinsJobName`, `jenkinsJobType`
+(`android` or `ios`), `provider`, `jenkinsMobileDefaultPool`, `suiteOwner`, `jenkinsEmail`,
+`jenkinsEnvironments`, and a `capabilities.app` field for the build to install. Carina itself never
+reads any of them, so they change nothing about a local run.
+
+| Suite | Launcher |
+|---|---|
+| `android.xml` / `ios.xml` | `Swaglabs-Android-Full` / `Swaglabs-iOS-Full` |
+| `regression.xml` / `ios_regression.xml` | `Swaglabs-Android-Regression` / `Swaglabs-iOS-Regression` |
+| `smoke.xml` / `ios_smoke.xml` | `Swaglabs-Android-Smoke` / `Swaglabs-iOS-Smoke` |
+| `grid`, `filter`, `cart`, `account`, `login` (+ `ios_` twins) | `Swaglabs-<Platform>-<Area>` |
+| `retry_demo.xml` | `Swaglabs-Retry-Demo` — **run this one first**: it drives no device, so it proves the pipeline without a device farm |
+
+`Swaglabs-Retry-Demo` is the one launcher that needs no device farm at all — it is a driverless
+suite (`jenkinsJobType=api`), so it is the cheapest way to confirm that the repository scan, job
+generation, reporting and retry tracking all work. It is **meant to end red**: two of its cases fail
+on purpose, and they show as failed tests rather than a broken build because the pipeline hands the
+job status to Zebrunner when reporting is on.
+
+For the device suites, a launcher run differs from a local one in exactly two ways, both handled: the hub comes from the
+farm (`-Dselenium_url`) instead of `localhost:4723`, and the device is leased from a pool, so
+`capabilities/<platform>-local.properties` is skipped — that is what the suite's `provider`
+parameter signals.
+
 ## Project structure
 
 ```
 docs/test-cases.csv                     Source of truth for the test design (one row per step)
 docs/locator-reference.md               Accessibility ids and the platform differences, from live dumps
 docs/generate_readme_cases.py           Regenerates this file's test-case section from the CSV
+docs/generate_zebrunner_import.py       Reshapes the CSV for Zebrunner's test-case importer
+docs/zebrunner-test-cases.csv           Generated - the file to upload to Zebrunner TCM
 src/main/java/com/mobile/swaglabs/qa/
 ├── IConstants.java                     Timeouts, numeric constants, assertion messages
 ├── SwagLabsBaseTest.java               Base test: getLoginService(), user release
@@ -170,8 +248,9 @@ src/main/java/com/mobile/swaglabs/qa/
 ├── util/                               ColorUtil — pixel sampling for colour assertions
 ├── listener/                           ScreenshotOnFailureListener
 └── retry/                              RetryCountAnalyzer + the listener that attaches it
-src/main/resources/                     _config.properties, _testdata.properties, log4j2.xml
-src/main/resources/capabilities/        android.properties, ios.properties
+src/main/resources/                     _config.properties, _testdata.properties, log4j2.xml,
+                                        agent.properties (Zebrunner reporting)
+src/main/resources/capabilities/        android.properties, ios.properties (+ the -local overlays)
 src/main/resources/META-INF/services/   TestNG listener registration for the retry logic
 src/test/java/.../test/                 The five test classes
 src/test/java/.../retry/                RetryAnalyzerDemoTest — deliberate failures, no device

@@ -20,6 +20,7 @@ mvn clean test -Dsuite=ios_grid
 mvn allure:serve                   
 mvn clean test -Dsuite=retry_demo -Dthread_count=4 -Ddata_provider_thread_count=3  
 python3 docs/generate_readme_cases.py   
+python3 docs/generate_zebrunner_import.py   
 ```
 
 `-Dsuite=X` selects `src/test/resources/testng_suites/X.xml`; the default is `android` (`pom.xml`).
@@ -74,9 +75,13 @@ Worth knowing before changing configuration, because it is spread across four fi
 - **Capabilities.** Each suite XML declares `<parameter name="platform" value="android|ios"/>`;
   `SwagLabsBaseTest.loadPlatformCapabilities` (`@BeforeSuite`) loads
   `src/main/resources/capabilities/<platform>.properties` into `R.CONFIG`. Carina does not read
-  `capabilities.*` out of TestNG suite parameters, which is why the indirection exists — and because
-  that load happens after JVM start, the method then re-applies any `-Dcapabilities.*` so a
-  command-line override still wins. `_config.properties` stays platform-neutral.
+  `capabilities.*` out of TestNG suite parameters, which is why the indirection exists.
+  Four layers, in order: the platform file (farm-safe caps only), then
+  `capabilities/<platform>-local.properties` (this machine's `deviceName`/`udid`/`platformVersion`)
+  **unless** `provider` is set, then any `-Dcapabilities.*`, then the capabilities a Zebrunner
+  launcher picked. The last two are re-applied here because the properties load happens after JVM
+  start and after `CarinaListener`'s constructor respectively, so without it the file would win over
+  both. `_config.properties` stays platform-neutral.
 - **Driver lifecycle.** `driver_mode=method_mode`, so Carina relaunches the app per test *method*:
   every test starts with an empty cart and no session, which is what makes rule 1 cheap. It is
   *not* per data-provider invocation — SL-16 logs out explicitly between users for that reason.
@@ -111,6 +116,36 @@ Worth knowing before changing configuration, because it is spread across four fi
 - **Test metadata.** Every `@Test` carries `@MethodOwner`, `@TestPriority`, and
   `@TestTag(tcId=SL-nn)` + `@TestTag(feature=…)`. `docs/test-cases.csv` is the source of truth for
   the case design; the README's case section is generated from it.
+- **Zebrunner.** Three separate things, none of which needs a new dependency — `carina-core` already
+  brings `agent-core`, so `agent.properties`, `@TestCaseKey` and `RemoteWebDriverFactory` are on the
+  classpath.
+  - *Reporting.* `src/main/resources/agent.properties` holds hostname and
+    `reporting.project-key=SAUCEM`, with `reporting.enabled=false` so a local run stays local. The
+    access token is deliberately not in the file; pass it as `REPORTING_SERVER_ACCESS_TOKEN`. A
+    launcher run gets all three injected as `REPORTING_*` environment variables, which outrank the
+    file.
+  - *Launchers.* Zebrunner's repository scan generates one job per TestNG suite XML under
+    `src/test/resources/testng_suites/`, and takes the project from `reporting.project-key` in
+    `agent.properties`. What the generated job looks like comes from suite `<parameter>`s that Carina
+    itself never reads: `jenkinsJobName`, `jenkinsJobType` (`android`/`ios` — it decides the default
+    `capabilities` field), `jenkinsMobileDefaultPool`, `provider`, `suiteOwner`, `jenkinsEmail`,
+    `jenkinsEnvironments`, and `stringParam::<name>::<description>` for an extra launcher field. The
+    scan cannot be told to skip a suite; `jenkinsJobDisabled=true` is how a generated job is
+    neutralised, and no suite uses it. Adding `jenkinsRegressionPipeline` would additionally
+    generate a cron job; none do.
+    `retry_demo.xml` is the launcher to run first: it drives no device (`jenkinsJobType=api`, no
+    `provider`), so it exercises the scan, job generation, reporting and retry tracking without a
+    device farm. It is meant to end red, and does so as failed tests rather than a broken build
+    because the pipeline passes `-Dmaven.test.failure.ignore=true` whenever reporting is on. Its
+    `jenkinsDefaultRetryCount=2` matters: the launcher always passes `-Dretry_count`, which
+    outranks the suite's own `retry_count` parameter.
+  - *Case linkage.* `@TestCaseKey("SAUCEM-nn")` on a `@Test` reports its result against the imported
+    TCM case. Prefer the annotation over `TestCase.setTestCaseKey` from a listener: the agent reads
+    it when it starts the test, whereas a second `IInvokedMethodListener` would be racing it.
+  - *Case migration.* `docs/generate_zebrunner_import.py` reshapes `docs/test-cases.csv` into
+    `docs/zebrunner-test-cases.csv` for the TCM importer (`Title` + `Suite` mandatory; one step per
+    row is supported; unrecognised columns are ignored, which is why `TC_ID` is prefixed onto the
+    title and Platform/Test Data/Automated Method are folded into the description and step text).
 
 ## Rules
 
@@ -197,6 +232,13 @@ Worth knowing before changing configuration, because it is spread across four fi
   `com.mobile.swaglabs.qa`, which includes the listeners themselves, so without a dedicated
   `com.mobile.swaglabs.qa.listener` logger in `log4j2.xml` a line like *"Could not attach a failure
   screenshot"* shows up in the report as a test step.
+- **Carina drops a blank or `NULL` capability only at JVM start, never afterwards.** `R`'s static
+  init strips blank and `NULL` `capabilities.*` entries, but `CapabilitiesLoader` and
+  `R.CONFIG.put` do not, and the read side (`AbstractCapabilities.getGlobalCapabilities`) filters
+  `null` alone. So a `capabilities.udid=NULL` in a properties file, or an empty
+  `-Dcapabilities.app` re-applied after that init, reaches Appium as a real capability with the
+  literal value. That is why device identity lives in a separate `-local` file rather than being
+  blanked out, and why `applyCommandLineOverrides` skips empty values itself.
 - **`CarinaListener` overwrites a suite's `thread-count`.** It rewrites `thread-count` and
   `data-provider-thread-count` from `thread_count` / `data_provider_thread_count` in
   `_config.properties`, both `1` here, so declaring them in a suite XML has no effect. A suite that

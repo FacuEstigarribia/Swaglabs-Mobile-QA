@@ -4,6 +4,31 @@
 
     <parameter name="retry_count" value="2"/>
 
+    <!-- Zebrunner launcher metadata. This is the only suite here that drives no device, so
+         it is the one that can prove the whole chain - repository scan, job generation,
+         reporting, retry tracking - without a device farm. Run it first.
+
+         `jenkinsJobType=api` is the driverless job type: no device pool or app field is
+         added, and the run is labelled platform API in Zebrunner. There is deliberately no
+         `provider` for the same reason - nothing leases a device.
+
+         The suite is *meant to end red*: two of its cases fail on purpose. That reads as
+         failed tests rather than a broken build, because the pipeline passes
+         -Dmaven.test.failure.ignore=true whenever reporting is on and takes the job status
+         from Zebrunner's results instead. -->
+    <parameter name="suiteOwner" value="festigarribia"/>
+    <parameter name="jenkinsJobName" value="Swaglabs-Retry-Demo"/>
+    <parameter name="jenkinsJobType" value="api"/>
+    <parameter name="jenkinsEmail" value="festigarribia@solvd.com"/>
+    <parameter name="jenkinsEnvironments" value="DEMO"/>
+
+    <!-- The launcher always passes -Dretry_count, which outranks the suite parameter above,
+         so the launcher's own default has to be set here too or a run would silently drop to
+         0 retries and the demo would prove nothing. `thread_count` and
+         `data_provider_thread_count` need no equivalent: those come from this suite's
+         thread-count and data-provider-thread-count attributes automatically. -->
+    <parameter name="jenkinsDefaultRetryCount" value="2"/>
+
     <test name="Retry analyzer demo">
         <classes>
             <class name="com.mobile.swaglabs.qa.retry.RetryAnalyzerDemoTest"/>
