@@ -4,6 +4,26 @@
     <!-- Selects src/main/resources/capabilities/ios.properties. -->
     <parameter name="platform" value="ios"/>
 
+    <!-- Zebrunner launcher metadata. Read by the repository scan, which generates one job
+         per suite from it; it has no effect on a local `mvn test` run. See CLAUDE.md. -->
+    <parameter name="suiteOwner" value="festigarribia"/>
+    <parameter name="jenkinsJobName" value="Swaglabs-iOS-Account"/>
+    <parameter name="jenkinsJobType" value="ios"/>
+    <parameter name="jenkinsEmail" value="festigarribia@solvd.com"/>
+    <parameter name="jenkinsEnvironments" value="DEMO"/>
+
+    <!-- Which farm serves the run, and the pool the device is leased from. `provider` also
+         reaches the tests as -Dprovider, which is how SwagLabsBaseTest knows to skip
+         capabilities/ios-local.properties and leave this machine's simulator out of it. -->
+    <parameter name="provider" value="mcloud"/>
+    <parameter name="jenkinsMobileDefaultPool" value="ANY"/>
+
+    <!-- Renders an editable field on the launcher. Empty by design: fill it in when starting
+         a run, or leave it blank to test the build already installed on the leased device.
+         An empty value is dropped rather than passed to Appium - see
+         SwagLabsBaseTest.applyCommandLineOverrides. -->
+    <parameter name="stringParam::capabilities.app::Swag Labs build to install (.ipa or .zip); blank uses the build already on the device" value=""/>
+
     <listeners>
         <listener class-name="com.mobile.swaglabs.qa.listener.ScreenshotOnFailureListener"/>
     </listeners>

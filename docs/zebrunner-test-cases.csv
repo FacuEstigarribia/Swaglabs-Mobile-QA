@@ -1,0 +1,601 @@
+Title,Suite,Suite Description,Description,Pre-conditions,Priority,Automation State,Step,Expected Result
+SL-16 Every valid user in the pool can log in and reach Products,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Every valid user in the pool can log in and reach Products.
+
+Legacy ID: SL-16
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithAllValidUsers
+Test data: standard_user / problem_user",Swag Labs app is installed and launched on the device,P1,Automated,Log in with the valid user supplied by the data provider (test data: standard_user / problem_user),Products page opens and the PRODUCTS header is displayed
+SL-16 Every valid user in the pool can log in and reach Products,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Every valid user in the pool can log in and reach Products.
+
+Legacy ID: SL-16
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithAllValidUsers
+Test data: standard_user / problem_user",Swag Labs app is installed and launched on the device,P1,Automated,Verify the product grid rendered for this user,Exactly 6 product cards are displayed
+SL-16 Every valid user in the pool can log in and reach Products,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Every valid user in the pool can log in and reach Products.
+
+Legacy ID: SL-16
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithAllValidUsers
+Test data: standard_user / problem_user",Swag Labs app is installed and launched on the device,P1,Automated,Check that no login error banner is present,No login error banner is displayed
+SL-16 Every valid user in the pool can log in and reach Products,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Every valid user in the pool can log in and reach Products.
+
+Legacy ID: SL-16
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithAllValidUsers
+Test data: standard_user / problem_user",Swag Labs app is installed and launched on the device,P1,Automated,Open the menu and tap LOGOUT,The login page opens with empty username and password fields
+SL-16 Every valid user in the pool can log in and reach Products,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Every valid user in the pool can log in and reach Products.
+
+Legacy ID: SL-16
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithAllValidUsers
+Test data: standard_user / problem_user",Swag Labs app is installed and launched on the device,P1,Automated,Repeat steps 1 to 4 for every remaining user in the valid pool,"Every valid user in the pool (standard_user, problem_user) logs in successfully and logs out cleanly"
+SL-17 Invalid username is rejected with field and banner errors,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Invalid username is rejected with field and banner errors.
+
+Legacy ID: SL-17
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithInvalidUsernameIsRejected
+Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the app and confirm the login page is displayed,The login page opens with username password and LOGIN controls displayed
+SL-17 Invalid username is rejected with field and banner errors,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Invalid username is rejected with field and banner errors.
+
+Legacy ID: SL-17
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithInvalidUsernameIsRejected
+Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Enter an invalid username and a valid password then tap LOGIN (test data: invalid_user / secret_sauce),The login page remains displayed and no navigation occurs
+SL-17 Invalid username is rejected with field and banner errors,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Invalid username is rejected with field and banner errors.
+
+Legacy ID: SL-17
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithInvalidUsernameIsRejected
+Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Check whether the Products page opened,The Products page is NOT open
+SL-17 Invalid username is rejected with field and banner errors,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Invalid username is rejected with field and banner errors.
+
+Legacy ID: SL-17
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithInvalidUsernameIsRejected
+Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Check the error banner on the login page,The error banner is displayed with the text: Username and password do not match any user in this service.
+SL-17 Invalid username is rejected with field and banner errors,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Invalid username is rejected with field and banner errors.
+
+Legacy ID: SL-17
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithInvalidUsernameIsRejected
+Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Inspect the username field,A cross (X) error icon is displayed inside the username field
+SL-17 Invalid username is rejected with field and banner errors,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Invalid username is rejected with field and banner errors.
+
+Legacy ID: SL-17
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithInvalidUsernameIsRejected
+Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Inspect the password field,A cross (X) error icon is displayed inside the password field
+SL-17 Invalid username is rejected with field and banner errors,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Invalid username is rejected with field and banner errors.
+
+Legacy ID: SL-17
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithInvalidUsernameIsRejected
+Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Inspect the border colour of the username field,The username field border is rendered red
+SL-17 Invalid username is rejected with field and banner errors,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Invalid username is rejected with field and banner errors.
+
+Legacy ID: SL-17
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithInvalidUsernameIsRejected
+Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Inspect the border colour of the password field,The password field border is rendered red
+SL-01 Product grid shows all catalog items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Product grid shows all catalog items.
+
+Legacy ID: SL-01
+Platforms: Android, iOS
+Automated by: ProductGridTest.testProductGridDisplaysAllItems
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-01 Product grid shows all catalog items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Product grid shows all catalog items.
+
+Legacy ID: SL-01
+Platforms: Android, iOS
+Automated by: ProductGridTest.testProductGridDisplaysAllItems
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Count the product cards rendered in the grid,Exactly 6 product cards are displayed
+SL-01 Product grid shows all catalog items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Product grid shows all catalog items.
+
+Legacy ID: SL-01
+Platforms: Android, iOS
+Automated by: ProductGridTest.testProductGridDisplaysAllItems
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the product name on every card,Every card shows a non-empty product name
+SL-01 Product grid shows all catalog items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Product grid shows all catalog items.
+
+Legacy ID: SL-01
+Platforms: Android, iOS
+Automated by: ProductGridTest.testProductGridDisplaysAllItems
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the price label on every card,Every price matches the format $X.XX
+SL-01 Product grid shows all catalog items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Product grid shows all catalog items.
+
+Legacy ID: SL-01
+Platforms: Android, iOS
+Automated by: ProductGridTest.testProductGridDisplaysAllItems
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Check that every card renders a product image,An image element is present and displayed on every card
+SL-01 Product grid shows all catalog items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Product grid shows all catalog items.
+
+Legacy ID: SL-01
+Platforms: Android, iOS
+Automated by: ProductGridTest.testProductGridDisplaysAllItems
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Check that every card exposes an ADD TO CART control,An enabled ADD TO CART button is present on every card
+SL-02 Grid and list view toggle changes layout and preserves items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Grid and list view toggle changes layout and preserves items.
+
+Legacy ID: SL-02
+Platforms: Android, iOS
+Automated by: ProductGridTest.testToggleGridAndListView
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-02 Grid and list view toggle changes layout and preserves items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Grid and list view toggle changes layout and preserves items.
+
+Legacy ID: SL-02
+Platforms: Android, iOS
+Automated by: ProductGridTest.testToggleGridAndListView
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Record the ordered list of product names in the default view,A list of 6 product names is captured
+SL-02 Grid and list view toggle changes layout and preserves items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Grid and list view toggle changes layout and preserves items.
+
+Legacy ID: SL-02
+Platforms: Android, iOS
+Automated by: ProductGridTest.testToggleGridAndListView
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Tap the view toggle control,The layout switches to the alternate view and the toggle remains displayed
+SL-02 Grid and list view toggle changes layout and preserves items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Grid and list view toggle changes layout and preserves items.
+
+Legacy ID: SL-02
+Platforms: Android, iOS
+Automated by: ProductGridTest.testToggleGridAndListView
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Record the ordered list of product names in the toggled view,Still exactly 6 product cards are displayed
+SL-02 Grid and list view toggle changes layout and preserves items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Grid and list view toggle changes layout and preserves items.
+
+Legacy ID: SL-02
+Platforms: Android, iOS
+Automated by: ProductGridTest.testToggleGridAndListView
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Compare the two recorded name lists,Both lists contain the same 6 names in the same order
+SL-02 Grid and list view toggle changes layout and preserves items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Grid and list view toggle changes layout and preserves items.
+
+Legacy ID: SL-02
+Platforms: Android, iOS
+Automated by: ProductGridTest.testToggleGridAndListView
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Tap the view toggle control again,The layout returns to the original view with the same 6 products
+SL-03 Opening a product shows matching details,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Opening a product shows matching details.
+
+Legacy ID: SL-03
+Platforms: Android, iOS
+Automated by: ProductGridTest.testOpenProductDetailsFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-03 Opening a product shows matching details,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Opening a product shows matching details.
+
+Legacy ID: SL-03
+Platforms: Android, iOS
+Automated by: ProductGridTest.testOpenProductDetailsFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Record the name and price of the first product card,Name and price values are captured from the grid
+SL-03 Opening a product shows matching details,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Opening a product shows matching details.
+
+Legacy ID: SL-03
+Platforms: Android, iOS
+Automated by: ProductGridTest.testOpenProductDetailsFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap the first product card,The product details page opens
+SL-03 Opening a product shows matching details,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Opening a product shows matching details.
+
+Legacy ID: SL-03
+Platforms: Android, iOS
+Automated by: ProductGridTest.testOpenProductDetailsFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Compare the details page name with the recorded grid name,The product name on the details page equals the name recorded from the grid
+SL-03 Opening a product shows matching details,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Opening a product shows matching details.
+
+Legacy ID: SL-03
+Platforms: Android, iOS
+Automated by: ProductGridTest.testOpenProductDetailsFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Compare the details page price with the recorded grid price,The price on the details page equals the price recorded from the grid
+SL-03 Opening a product shows matching details,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Opening a product shows matching details.
+
+Legacy ID: SL-03
+Platforms: Android, iOS
+Automated by: ProductGridTest.testOpenProductDetailsFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Inspect the description and ADD TO CART control on the details page,A non-empty description and an enabled ADD TO CART button are displayed
+SL-04 Back from product details returns to an unchanged grid,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Back from product details returns to an unchanged grid.
+
+Legacy ID: SL-04
+Platforms: Android, iOS
+Automated by: ProductGridTest.testReturnFromDetailsToGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-04 Back from product details returns to an unchanged grid,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Back from product details returns to an unchanged grid.
+
+Legacy ID: SL-04
+Platforms: Android, iOS
+Automated by: ProductGridTest.testReturnFromDetailsToGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Record the ordered list of product names in the grid,A list of 6 product names is captured
+SL-04 Back from product details returns to an unchanged grid,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Back from product details returns to an unchanged grid.
+
+Legacy ID: SL-04
+Platforms: Android, iOS
+Automated by: ProductGridTest.testReturnFromDetailsToGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Open the second product card,The product details page opens for the selected product
+SL-04 Back from product details returns to an unchanged grid,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Back from product details returns to an unchanged grid.
+
+Legacy ID: SL-04
+Platforms: Android, iOS
+Automated by: ProductGridTest.testReturnFromDetailsToGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Tap the back control on the details page,The Products page is displayed again with the PRODUCTS header
+SL-04 Back from product details returns to an unchanged grid,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Back from product details returns to an unchanged grid.
+
+Legacy ID: SL-04
+Platforms: Android, iOS
+Automated by: ProductGridTest.testReturnFromDetailsToGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Record the ordered list of product names again,The list matches the list recorded in step 2 exactly
+SL-04 Back from product details returns to an unchanged grid,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Back from product details returns to an unchanged grid.
+
+Legacy ID: SL-04
+Platforms: Android, iOS
+Automated by: ProductGridTest.testReturnFromDetailsToGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Check the cart badge,No cart badge count is displayed because nothing was added
+SL-05 Sort by Name A to Z,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name A to Z.
+
+Legacy ID: SL-05
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameAscending
+Test data: Name (A to Z); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-05 Sort by Name A to Z,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name A to Z.
+
+Legacy ID: SL-05
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameAscending
+Test data: Name (A to Z); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the sort selector,The sort options list is displayed with all four sort options
+SL-05 Sort by Name A to Z,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name A to Z.
+
+Legacy ID: SL-05
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameAscending
+Test data: Name (A to Z); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Select Name (A to Z) (test data: Name (A to Z)),The sort selector closes and the Products page is displayed
+SL-05 Sort by Name A to Z,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name A to Z.
+
+Legacy ID: SL-05
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameAscending
+Test data: Name (A to Z); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the ordered list of product names,Still exactly 6 product cards are displayed
+SL-05 Sort by Name A to Z,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name A to Z.
+
+Legacy ID: SL-05
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameAscending
+Test data: Name (A to Z); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Compare the list against the same names sorted ascending case-insensitively,The displayed order equals the expected ascending order
+SL-06 Sort by Name Z to A,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name Z to A.
+
+Legacy ID: SL-06
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameDescending
+Test data: Name (Z to A); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-06 Sort by Name Z to A,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name Z to A.
+
+Legacy ID: SL-06
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameDescending
+Test data: Name (Z to A); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the sort selector,The sort options list is displayed with all four sort options
+SL-06 Sort by Name Z to A,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name Z to A.
+
+Legacy ID: SL-06
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameDescending
+Test data: Name (Z to A); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Select Name (Z to A) (test data: Name (Z to A)),The sort selector closes and the Products page is displayed
+SL-06 Sort by Name Z to A,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name Z to A.
+
+Legacy ID: SL-06
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameDescending
+Test data: Name (Z to A); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the ordered list of product names,Still exactly 6 product cards are displayed
+SL-06 Sort by Name Z to A,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name Z to A.
+
+Legacy ID: SL-06
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameDescending
+Test data: Name (Z to A); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Compare the list against the same names sorted descending case-insensitively,The displayed order equals the expected descending order
+SL-07 Sort by Price low to high,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price low to high.
+
+Legacy ID: SL-07
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceAscending
+Test data: Price (low to high); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-07 Sort by Price low to high,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price low to high.
+
+Legacy ID: SL-07
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceAscending
+Test data: Price (low to high); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the sort selector,The sort options list is displayed with all four sort options
+SL-07 Sort by Price low to high,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price low to high.
+
+Legacy ID: SL-07
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceAscending
+Test data: Price (low to high); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Select Price (low to high) (test data: Price (low to high)),The sort selector closes and the Products page is displayed
+SL-07 Sort by Price low to high,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price low to high.
+
+Legacy ID: SL-07
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceAscending
+Test data: Price (low to high); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the ordered list of prices and parse them as numbers,Six numeric prices are parsed successfully
+SL-07 Sort by Price low to high,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price low to high.
+
+Legacy ID: SL-07
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceAscending
+Test data: Price (low to high); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Verify each price is not greater than the next one,Prices are in non-decreasing order from first to last
+SL-08 Sort by Price high to low,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price high to low.
+
+Legacy ID: SL-08
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceDescending
+Test data: Price (high to low); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-08 Sort by Price high to low,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price high to low.
+
+Legacy ID: SL-08
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceDescending
+Test data: Price (high to low); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the sort selector,The sort options list is displayed with all four sort options
+SL-08 Sort by Price high to low,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price high to low.
+
+Legacy ID: SL-08
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceDescending
+Test data: Price (high to low); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Select Price (high to low) (test data: Price (high to low)),The sort selector closes and the Products page is displayed
+SL-08 Sort by Price high to low,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price high to low.
+
+Legacy ID: SL-08
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceDescending
+Test data: Price (high to low); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the ordered list of prices and parse them as numbers,Six numeric prices are parsed successfully
+SL-08 Sort by Price high to low,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price high to low.
+
+Legacy ID: SL-08
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceDescending
+Test data: Price (high to low); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Verify each price is not lower than the next one,Prices are in non-increasing order from first to last
+SL-09 Add a single item from the grid updates the cart badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add a single item from the grid updates the cart badge.
+
+Legacy ID: SL-09
+Platforms: Android, iOS
+Automated by: CartTest.testAddSingleItemFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-09 Add a single item from the grid updates the cart badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add a single item from the grid updates the cart badge.
+
+Legacy ID: SL-09
+Platforms: Android, iOS
+Automated by: CartTest.testAddSingleItemFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Check the cart badge before adding anything,No cart badge count is displayed
+SL-09 Add a single item from the grid updates the cart badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add a single item from the grid updates the cart badge.
+
+Legacy ID: SL-09
+Platforms: Android, iOS
+Automated by: CartTest.testAddSingleItemFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap ADD TO CART on the first product card,The button on that card changes to REMOVE
+SL-09 Add a single item from the grid updates the cart badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add a single item from the grid updates the cart badge.
+
+Legacy ID: SL-09
+Platforms: Android, iOS
+Automated by: CartTest.testAddSingleItemFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the cart badge,The cart badge displays 1
+SL-09 Add a single item from the grid updates the cart badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add a single item from the grid updates the cart badge.
+
+Legacy ID: SL-09
+Platforms: Android, iOS
+Automated by: CartTest.testAddSingleItemFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the cart,The cart page opens and displays exactly 1 line item
+SL-09 Add a single item from the grid updates the cart badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add a single item from the grid updates the cart badge.
+
+Legacy ID: SL-09
+Platforms: Android, iOS
+Automated by: CartTest.testAddSingleItemFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Compare the cart line item with the added product,The cart line item name and price match the product added in step 3
+SL-10 Add an item from the product details page,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add an item from the product details page.
+
+Legacy ID: SL-10
+Platforms: Android, iOS
+Automated by: CartTest.testAddItemFromProductDetails
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-10 Add an item from the product details page,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add an item from the product details page.
+
+Legacy ID: SL-10
+Platforms: Android, iOS
+Automated by: CartTest.testAddItemFromProductDetails
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the first product card,The product details page opens
+SL-10 Add an item from the product details page,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add an item from the product details page.
+
+Legacy ID: SL-10
+Platforms: Android, iOS
+Automated by: CartTest.testAddItemFromProductDetails
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Record the product name and price on the details page,Name and price values are captured
+SL-10 Add an item from the product details page,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add an item from the product details page.
+
+Legacy ID: SL-10
+Platforms: Android, iOS
+Automated by: CartTest.testAddItemFromProductDetails
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap ADD TO CART on the details page,The button changes to REMOVE and the cart badge displays 1
+SL-10 Add an item from the product details page,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add an item from the product details page.
+
+Legacy ID: SL-10
+Platforms: Android, iOS
+Automated by: CartTest.testAddItemFromProductDetails
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the cart from the details page,The cart page opens and displays exactly 1 line item
+SL-10 Add an item from the product details page,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add an item from the product details page.
+
+Legacy ID: SL-10
+Platforms: Android, iOS
+Automated by: CartTest.testAddItemFromProductDetails
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Compare the cart line item with the recorded values,The cart line item name and price match the values recorded in step 3
+SL-11 Add multiple items and verify cart contents match the badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add multiple items and verify cart contents match the badge.
+
+Legacy ID: SL-11
+Platforms: Android, iOS
+Automated by: CartTest.testAddMultipleItemsToCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-11 Add multiple items and verify cart contents match the badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add multiple items and verify cart contents match the badge.
+
+Legacy ID: SL-11
+Platforms: Android, iOS
+Automated by: CartTest.testAddMultipleItemsToCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap ADD TO CART on the first product card,The cart badge displays 1
+SL-11 Add multiple items and verify cart contents match the badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add multiple items and verify cart contents match the badge.
+
+Legacy ID: SL-11
+Platforms: Android, iOS
+Automated by: CartTest.testAddMultipleItemsToCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap ADD TO CART on the second product card,The cart badge displays 2
+SL-11 Add multiple items and verify cart contents match the badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add multiple items and verify cart contents match the badge.
+
+Legacy ID: SL-11
+Platforms: Android, iOS
+Automated by: CartTest.testAddMultipleItemsToCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap ADD TO CART on the third product card,The cart badge displays 3
+SL-11 Add multiple items and verify cart contents match the badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add multiple items and verify cart contents match the badge.
+
+Legacy ID: SL-11
+Platforms: Android, iOS
+Automated by: CartTest.testAddMultipleItemsToCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the cart,The cart page opens and displays exactly 3 line items
+SL-11 Add multiple items and verify cart contents match the badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add multiple items and verify cart contents match the badge.
+
+Legacy ID: SL-11
+Platforms: Android, iOS
+Automated by: CartTest.testAddMultipleItemsToCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Compare the cart line item names with the three added products,The cart contains exactly the three product names added in steps 2 to 4
+SL-12 Remove an item from the cart,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Remove an item from the cart.
+
+Legacy ID: SL-12
+Platforms: Android, iOS
+Automated by: CartTest.testRemoveItemFromCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-12 Remove an item from the cart,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Remove an item from the cart.
+
+Legacy ID: SL-12
+Platforms: Android, iOS
+Automated by: CartTest.testRemoveItemFromCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Add the first two product cards to the cart,The cart badge displays 2
+SL-12 Remove an item from the cart,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Remove an item from the cart.
+
+Legacy ID: SL-12
+Platforms: Android, iOS
+Automated by: CartTest.testRemoveItemFromCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Open the cart,The cart page opens and displays exactly 2 line items
+SL-12 Remove an item from the cart,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Remove an item from the cart.
+
+Legacy ID: SL-12
+Platforms: Android, iOS
+Automated by: CartTest.testRemoveItemFromCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap REMOVE on the first cart line item,That line item disappears and exactly 1 line item remains
+SL-12 Remove an item from the cart,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Remove an item from the cart.
+
+Legacy ID: SL-12
+Platforms: Android, iOS
+Automated by: CartTest.testRemoveItemFromCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the cart badge,The cart badge displays 1
+SL-12 Remove an item from the cart,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Remove an item from the cart.
+
+Legacy ID: SL-12
+Platforms: Android, iOS
+Automated by: CartTest.testRemoveItemFromCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap REMOVE on the remaining cart line item,The cart is empty and no cart badge count is displayed
+SL-13 Cart contents survive Continue Shopping,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Cart contents survive Continue Shopping.
+
+Legacy ID: SL-13
+Platforms: Android, iOS
+Automated by: CartTest.testCartPersistsAfterContinueShopping
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-13 Cart contents survive Continue Shopping,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Cart contents survive Continue Shopping.
+
+Legacy ID: SL-13
+Platforms: Android, iOS
+Automated by: CartTest.testCartPersistsAfterContinueShopping
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Add the first two product cards to the cart,The cart badge displays 2
+SL-13 Cart contents survive Continue Shopping,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Cart contents survive Continue Shopping.
+
+Legacy ID: SL-13
+Platforms: Android, iOS
+Automated by: CartTest.testCartPersistsAfterContinueShopping
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Open the cart and record the line item names,The cart page opens and 2 line item names are captured
+SL-13 Cart contents survive Continue Shopping,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Cart contents survive Continue Shopping.
+
+Legacy ID: SL-13
+Platforms: Android, iOS
+Automated by: CartTest.testCartPersistsAfterContinueShopping
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Tap CONTINUE SHOPPING,The Products page is displayed again with the PRODUCTS header
+SL-13 Cart contents survive Continue Shopping,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Cart contents survive Continue Shopping.
+
+Legacy ID: SL-13
+Platforms: Android, iOS
+Automated by: CartTest.testCartPersistsAfterContinueShopping
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Read the cart badge on the Products page,The cart badge still displays 2
+SL-13 Cart contents survive Continue Shopping,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Cart contents survive Continue Shopping.
+
+Legacy ID: SL-13
+Platforms: Android, iOS
+Automated by: CartTest.testCartPersistsAfterContinueShopping
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Reopen the cart and read the line item names,The cart still contains exactly the 2 names recorded in step 3
+SL-14 Menu exposes all expected navigation items,Swag Labs Mobile > Account,The navigation menu and logout.,"Menu exposes all expected navigation items.
+
+Legacy ID: SL-14
+Platforms: Android, iOS
+Automated by: AccountTest.testMenuItemsAreDisplayed
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-14 Menu exposes all expected navigation items,Swag Labs Mobile > Account,The navigation menu and logout.,"Menu exposes all expected navigation items.
+
+Legacy ID: SL-14
+Platforms: Android, iOS
+Automated by: AccountTest.testMenuItemsAreDisplayed
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Tap the hamburger menu control,The navigation menu opens
+SL-14 Menu exposes all expected navigation items,Swag Labs Mobile > Account,The navigation menu and logout.,"Menu exposes all expected navigation items.
+
+Legacy ID: SL-14
+Platforms: Android, iOS
+Automated by: AccountTest.testMenuItemsAreDisplayed
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Check for the ALL ITEMS entry,The ALL ITEMS entry is displayed
+SL-14 Menu exposes all expected navigation items,Swag Labs Mobile > Account,The navigation menu and logout.,"Menu exposes all expected navigation items.
+
+Legacy ID: SL-14
+Platforms: Android, iOS
+Automated by: AccountTest.testMenuItemsAreDisplayed
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Check for the WEBVIEW and QR CODE SCANNER entries,Both entries are displayed
+SL-14 Menu exposes all expected navigation items,Swag Labs Mobile > Account,The navigation menu and logout.,"Menu exposes all expected navigation items.
+
+Legacy ID: SL-14
+Platforms: Android, iOS
+Automated by: AccountTest.testMenuItemsAreDisplayed
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Check for the GEO LOCATION and DRAWING entries,Both entries are displayed
+SL-14 Menu exposes all expected navigation items,Swag Labs Mobile > Account,The navigation menu and logout.,"Menu exposes all expected navigation items.
+
+Legacy ID: SL-14
+Platforms: Android, iOS
+Automated by: AccountTest.testMenuItemsAreDisplayed
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Check for the ABOUT RESET APP STATE and LOGOUT entries,All three entries are displayed
+SL-14 Menu exposes all expected navigation items,Swag Labs Mobile > Account,The navigation menu and logout.,"Menu exposes all expected navigation items.
+
+Legacy ID: SL-14
+Platforms: Android, iOS
+Automated by: AccountTest.testMenuItemsAreDisplayed
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,Close the menu,The menu closes and the Products page is displayed again
+SL-15 Logout returns to the login screen with fields cleared,Swag Labs Mobile > Account,The navigation menu and logout.,"Logout returns to the login screen with fields cleared.
+
+Legacy ID: SL-15
+Platforms: Android, iOS
+Automated by: AccountTest.testLogoutReturnsToLoginPage
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Log in with a valid user (test data: standard_user / secret_sauce),Products page opens and the PRODUCTS header is displayed
+SL-15 Logout returns to the login screen with fields cleared,Swag Labs Mobile > Account,The navigation menu and logout.,"Logout returns to the login screen with fields cleared.
+
+Legacy ID: SL-15
+Platforms: Android, iOS
+Automated by: AccountTest.testLogoutReturnsToLoginPage
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap the hamburger menu control,The navigation menu opens and the LOGOUT entry is displayed
+SL-15 Logout returns to the login screen with fields cleared,Swag Labs Mobile > Account,The navigation menu and logout.,"Logout returns to the login screen with fields cleared.
+
+Legacy ID: SL-15
+Platforms: Android, iOS
+Automated by: AccountTest.testLogoutReturnsToLoginPage
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Tap LOGOUT,The login page opens with the username and password fields displayed
+SL-15 Logout returns to the login screen with fields cleared,Swag Labs Mobile > Account,The navigation menu and logout.,"Logout returns to the login screen with fields cleared.
+
+Legacy ID: SL-15
+Platforms: Android, iOS
+Automated by: AccountTest.testLogoutReturnsToLoginPage
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the username field value,The username field is empty
+SL-15 Logout returns to the login screen with fields cleared,Swag Labs Mobile > Account,The navigation menu and logout.,"Logout returns to the login screen with fields cleared.
+
+Legacy ID: SL-15
+Platforms: Android, iOS
+Automated by: AccountTest.testLogoutReturnsToLoginPage
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Read the password field value,The password field is empty
+SL-15 Logout returns to the login screen with fields cleared,Swag Labs Mobile > Account,The navigation menu and logout.,"Logout returns to the login screen with fields cleared.
+
+Legacy ID: SL-15
+Platforms: Android, iOS
+Automated by: AccountTest.testLogoutReturnsToLoginPage
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,Check that no error message is shown on the login page,No login error banner is displayed
