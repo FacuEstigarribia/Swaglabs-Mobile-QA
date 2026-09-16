@@ -2,19 +2,19 @@
   "capabilities": [
     {
       "platformName": "iOS",
-      "appium:udid": "B7C13093-3F0C-4711-8801-0178C4EFECF5",
-      "appium:deviceName": "iPhone 17",
+      "appium:udid": "FFC09482-BDDE-4692-8962-508A2CF062BA",
+      "appium:deviceName": "iPhone 17 Pro",
       "maxInstances": 1,
       "appium:platformVersion": "26.5",
-      "appium:wdaLocalPort": 8100,
-      "appium:derivedDataPath": "/tmp/qamobile-wda-ios-1"
+      "appium:wdaLocalPort": 8101,
+      "appium:derivedDataPath": "/tmp/qamobile-wda-ios-2"
     }
   ],
   "configuration": {
     "proxy": "com.zebrunner.mcloud.grid.MobileRemoteProxy",
     "host": "appium-bridge",
-    "port": 4726,
-    "remoteHost": "http://appium-bridge:4726",
+    "port": 4728,
+    "remoteHost": "http://appium-bridge:4728",
     "hubHost": "grid",
     "hubPort": 4444,
     "maxSession": 1,
