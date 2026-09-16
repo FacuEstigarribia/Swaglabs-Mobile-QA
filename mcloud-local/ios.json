@@ -1,0 +1,22 @@
+{
+  "capabilities": [
+    {
+      "platformName": "iOS",
+      "appium:udid": "B7C13093-3F0C-4711-8801-0178C4EFECF5",
+      "appium:deviceName": "iPhone 17",
+      "maxInstances": 1,
+      "appium:platformVersion": "26.5"
+    }
+  ],
+  "configuration": {
+    "proxy": "com.zebrunner.mcloud.grid.MobileRemoteProxy",
+    "host": "appium-bridge",
+    "port": 4726,
+    "remoteHost": "http://appium-bridge:4726",
+    "hubHost": "grid",
+    "hubPort": 4444,
+    "maxSession": 1,
+    "register": true,
+    "timeout": 300
+  }
+}

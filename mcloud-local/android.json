@@ -1,0 +1,21 @@
+{
+  "capabilities": [
+    {
+      "platformName": "Android",
+      "appium:udid": "emulator-5554",
+      "appium:deviceName": "emulator-5554",
+      "maxInstances": 1
+    }
+  ],
+  "configuration": {
+    "proxy": "com.zebrunner.mcloud.grid.MobileRemoteProxy",
+    "host": "appium-bridge",
+    "port": 4725,
+    "remoteHost": "http://appium-bridge:4725",
+    "hubHost": "grid",
+    "hubPort": 4444,
+    "maxSession": 1,
+    "register": true,
+    "timeout": 300
+  }
+}

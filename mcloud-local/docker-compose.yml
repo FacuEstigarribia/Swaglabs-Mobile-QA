@@ -1,0 +1,16 @@
+name: mcloud-local
+services:
+  grid:
+    image: public.ecr.aws/zebrunner/mcloud-grid:2.6@sha256:690f7eec04989a598393fbbcbb3cbdf0edd56f2e76e0d3ee2f41aa9bd311eeb3
+    platform: linux/amd64
+    ports:
+      - "127.0.0.1:4446:4444"
+    environment:
+      CHECK_APPIUM_STATUS: "false"
+      GRID_NEW_SESSION_WAIT_TIMEOUT: "30000"
+    restart: unless-stopped
+  appium-bridge:
+    image: nginx:1.25.3
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
