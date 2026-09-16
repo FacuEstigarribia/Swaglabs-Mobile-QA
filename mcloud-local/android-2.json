@@ -2,18 +2,18 @@
   "capabilities": [
     {
       "platformName": "Android",
-      "appium:udid": "emulator-5554",
-      "appium:deviceName": "emulator-5554",
-      "appium:systemPort": 8200,
-      "appium:mjpegServerPort": 7810,
+      "appium:udid": "emulator-5556",
+      "appium:deviceName": "emulator-5556",
+      "appium:systemPort": 8201,
+      "appium:mjpegServerPort": 7811,
       "maxInstances": 1
     }
   ],
   "configuration": {
     "proxy": "com.zebrunner.mcloud.grid.MobileRemoteProxy",
     "host": "appium-bridge",
-    "port": 4725,
-    "remoteHost": "http://appium-bridge:4725",
+    "port": 4727,
+    "remoteHost": "http://appium-bridge:4727",
     "hubHost": "grid",
     "hubPort": 4444,
     "maxSession": 1,

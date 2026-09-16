@@ -6,7 +6,14 @@ The iOS simulator and Android emulator run on macOS. Keep Appium running on port
 
 ## Start
 
-Run `bash start.sh` from this directory. It starts Docker services and registers the two devices. Run it again after restarting Grid, when no tests are active, to restore registrations.
+Run `bash start.sh` from this directory. It starts Docker services and registers the four device slots. Run it again after restarting Grid, when no tests are active, to restore registrations.
+
+After the first update to this four-slot configuration, with no tests active, recreate the Docker services and register the nodes:
+
+```bash
+docker compose down
+bash start.sh
+```
 
 Open http://localhost:4446/grid/console to view nodes. The test endpoint is http://localhost:4446/wd/hub.
 
@@ -23,7 +30,25 @@ bash run-tests.sh android regression
 bash run-tests.sh ios regression
 ```
 
-The wrapper targets the project root, one directory above this folder. Override QAMOBILE_PROJECT to use another checkout. It passes provider=mcloud, the Grid URL, an explicit UDID, and sends every supported suite to Zebrunner by default. The iOS command requests a fresh WebDriverAgent launch because the initial pilot encountered a stale WDA connection on port 8100. This can increase startup time. The allowed suite list excludes retry_demo. Feature selections are grid, filter, cart, account, and login.
+The wrapper targets the project root, one directory above this folder. Override QAMOBILE_PROJECT to use another checkout. It passes provider=mcloud, the Grid URL, an explicit UDID, and sends every supported suite to Zebrunner by default. The allowed suite list excludes retry_demo. Feature selections are grid, filter, cart, account, and login.
+
+Four single-session device slots are available:
+
+| Slot | Device | Session ports |
+|---|---|---|
+| `android-1` | `emulator-5554` | UiAutomator2 8200, MJPEG 7810 |
+| `android-2` | `emulator-5556` | UiAutomator2 8201, MJPEG 7811 |
+| `ios-1` | iPhone 17 (`B7C13093-3F0C-4711-8801-0178C4EFECF5`) | WDA 8100 |
+| `ios-2` | iPhone 17 Pro (`FFC09482-BDDE-4692-8962-508A2CF062BA`) | WDA 8101 |
+
+Use `--device` to select a slot. The default is `android-1` for Android and `ios-1` for iOS. A lock prevents two commands from controlling the same slot, while different slots can run concurrently:
+
+```bash
+bash run-tests.sh ios smoke --device ios-1
+bash run-tests.sh ios grid --device ios-2
+```
+
+Run `bash start.sh` after any Docker or Grid restart so all four nodes are registered.
 
 The two regression suites cover the main test cases; running every feature XML as well repeats coverage. Concurrent execution is not validated by this setup.
 

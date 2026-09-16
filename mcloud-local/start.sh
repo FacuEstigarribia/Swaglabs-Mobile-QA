@@ -8,7 +8,7 @@ curl --fail --silent --show-error --max-time 5 http://localhost:4723/status >/de
 docker compose up -d
 for attempt in {1..60}; do
     if curl --fail --silent --max-time 3 http://localhost:4446/wd/hub/status >/dev/null; then
-        for platform in android ios; do
+        for platform in android android-2 ios ios-2; do
             curl --fail --silent --show-error --max-time 10 \
                 -H 'Content-Type: application/json' \
                 --data-binary "@$platform.json" \
