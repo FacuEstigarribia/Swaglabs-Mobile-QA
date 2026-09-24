@@ -5,6 +5,7 @@ import static com.mobile.swaglabs.qa.enums.UserPool.VALID_USERS_POOL;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.zebrunner.agent.core.annotation.TestCaseKey;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -25,6 +26,7 @@ public class CartTest extends SwagLabsBaseTest {
     @Test(description = "Add a single item from the grid updates the cart badge")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-109")
     @TestTag(name = "tcId", value = "SL-09")
     @TestTag(name = "feature", value = "Cart")
     public void testAddSingleItemFromGrid() {
@@ -57,6 +59,7 @@ public class CartTest extends SwagLabsBaseTest {
     @Test(description = "Add an item from the product details page")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-110")
     @TestTag(name = "tcId", value = "SL-10")
     @TestTag(name = "feature", value = "Cart")
     public void testAddItemFromProductDetails() {
@@ -91,6 +94,7 @@ public class CartTest extends SwagLabsBaseTest {
     @Test(description = "Add multiple items and verify cart contents match the badge")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-111")
     @TestTag(name = "tcId", value = "SL-11")
     @TestTag(name = "feature", value = "Cart")
     public void testAddMultipleItemsToCart() {
@@ -113,6 +117,7 @@ public class CartTest extends SwagLabsBaseTest {
     @Test(description = "Remove an item from the cart")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-112")
     @TestTag(name = "tcId", value = "SL-12")
     @TestTag(name = "feature", value = "Cart")
     public void testRemoveItemFromCart() {
@@ -142,6 +147,7 @@ public class CartTest extends SwagLabsBaseTest {
     @Test(description = "Cart contents survive Continue Shopping")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P2)
+    @TestCaseKey(value = "SAUCEM-113")
     @TestTag(name = "tcId", value = "SL-13")
     @TestTag(name = "feature", value = "Cart")
     public void testCartPersistsAfterContinueShopping() {

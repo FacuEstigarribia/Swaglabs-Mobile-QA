@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reformat Test Cases CSV"
+  short_description: "Collapse test steps into one CSV row per case"
+  default_prompt: "Use $reformat-test-cases-csv to format all project test cases into the canonical CSV schema."

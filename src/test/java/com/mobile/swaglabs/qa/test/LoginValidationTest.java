@@ -3,6 +3,7 @@ package com.mobile.swaglabs.qa.test;
 import static com.mobile.swaglabs.qa.enums.UserPool.ALL_VALID_USERS_POOL;
 import static com.mobile.swaglabs.qa.enums.UserPool.INVALID_USERS_POOL;
 
+import com.zebrunner.agent.core.annotation.TestCaseKey;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -39,6 +40,7 @@ public class LoginValidationTest extends SwagLabsBaseTest {
             description = "Every valid user in the pool can log in and reach Products")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-116")
     @TestTag(name = "tcId", value = "SL-16")
     @TestTag(name = "feature", value = "Login")
     public void testLoginWithAllValidUsers(UserData user) {
@@ -64,6 +66,7 @@ public class LoginValidationTest extends SwagLabsBaseTest {
     @Test(description = "Invalid username is rejected with field and banner errors")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-117")
     @TestTag(name = "tcId", value = "SL-17")
     @TestTag(name = "feature", value = "Login")
     public void testLoginWithInvalidUsernameIsRejected() {
