@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.zebrunner.agent.core.annotation.TestCaseKey;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -31,6 +32,7 @@ public class ProductFilterTest extends SwagLabsBaseTest {
     @Test(description = "Sort by Name A to Z")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-105")
     @TestTag(name = "tcId", value = "SL-05")
     @TestTag(name = "feature", value = "Filtering")
     public void testSortByNameAscending() {
@@ -40,6 +42,7 @@ public class ProductFilterTest extends SwagLabsBaseTest {
     @Test(description = "Sort by Name Z to A")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-106")
     @TestTag(name = "tcId", value = "SL-06")
     @TestTag(name = "feature", value = "Filtering")
     public void testSortByNameDescending() {
@@ -49,6 +52,7 @@ public class ProductFilterTest extends SwagLabsBaseTest {
     @Test(description = "Sort by Price low to high")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-107")
     @TestTag(name = "tcId", value = "SL-07")
     @TestTag(name = "feature", value = "Filtering")
     public void testSortByPriceAscending() {
@@ -58,6 +62,7 @@ public class ProductFilterTest extends SwagLabsBaseTest {
     @Test(description = "Sort by Price high to low")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-108")
     @TestTag(name = "tcId", value = "SL-08")
     @TestTag(name = "feature", value = "Filtering")
     public void testSortByPriceDescending() {

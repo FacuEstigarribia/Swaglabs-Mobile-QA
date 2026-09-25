@@ -38,6 +38,9 @@
             <class name="com.mobile.swaglabs.qa.test.LoginValidationTest">
                 <methods><include name="testLoginWithInvalidUsernameIsRejected"/></methods>
             </class>
+            <class name="com.mobile.swaglabs.qa.test.CartTest">
+                <methods><include name="testSuccessfulCheckoutCalculatesTotalsAndCompletesPurchase"/></methods>
+            </class>
         </classes>
     </test>
 </suite>

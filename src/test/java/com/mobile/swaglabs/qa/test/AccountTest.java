@@ -2,6 +2,7 @@ package com.mobile.swaglabs.qa.test;
 
 import static com.mobile.swaglabs.qa.enums.UserPool.VALID_USERS_POOL;
 
+import com.zebrunner.agent.core.annotation.TestCaseKey;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -22,6 +23,7 @@ public class AccountTest extends SwagLabsBaseTest {
     @Test(description = "Menu exposes all expected navigation items")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P2)
+    @TestCaseKey(value = "SAUCEM-114")
     @TestTag(name = "tcId", value = "SL-14")
     @TestTag(name = "feature", value = "Account")
     public void testMenuItemsAreDisplayed() {
@@ -47,6 +49,7 @@ public class AccountTest extends SwagLabsBaseTest {
     @Test(description = "Logout returns to the login screen with fields cleared")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-115")
     @TestTag(name = "tcId", value = "SL-15")
     @TestTag(name = "feature", value = "Account")
     public void testLogoutReturnsToLoginPage() {

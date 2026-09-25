@@ -1,0 +1,357 @@
+Title,Suite,Suite Description,Description,Pre-conditions,Priority,Automation State,Step,Expected Result
+SL-01 Product grid shows all catalog items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Product grid shows all catalog items.
+
+Legacy ID: SL-01
+Platforms: Android, iOS
+Automated by: ProductGridTest.testProductGridDisplaysAllItems
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Count the product cards rendered in the grid
+3. Read the product name on every card
+4. Read the price label on every card
+5. Check that every card renders a product image
+6. Check that every card exposes an ADD TO CART control","1. Products page opens and the PRODUCTS header is displayed
+2. Exactly 6 product cards are displayed
+3. Every card shows a non-empty product name
+4. Every price matches the format $X.XX
+5. An image element is present and displayed on every card
+6. An enabled ADD TO CART button is present on every card"
+SL-02 Grid and list view toggle changes layout and preserves items,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Grid and list view toggle changes layout and preserves items.
+
+Legacy ID: SL-02
+Platforms: Android, iOS
+Automated by: ProductGridTest.testToggleGridAndListView
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,"1. Log in with a valid user
+2. Record the ordered list of product names in the default view
+3. Tap the view toggle control
+4. Record the ordered list of product names in the toggled view
+5. Compare the two recorded name lists
+6. Tap the view toggle control again","1. Products page opens and the PRODUCTS header is displayed
+2. A list of 6 product names is captured
+3. The layout switches to the alternate view and the toggle remains displayed
+4. Still exactly 6 product cards are displayed
+5. Both lists contain the same 6 names in the same order
+6. The layout returns to the original view with the same 6 products"
+SL-03 Opening a product shows matching details,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Opening a product shows matching details.
+
+Legacy ID: SL-03
+Platforms: Android, iOS
+Automated by: ProductGridTest.testOpenProductDetailsFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Record the name and price of the first product card
+3. Tap the first product card
+4. Compare the details page name with the recorded grid name
+5. Compare the details page price with the recorded grid price
+6. Inspect the description and ADD TO CART control on the details page","1. Products page opens and the PRODUCTS header is displayed
+2. Name and price values are captured from the grid
+3. The product details page opens
+4. The product name on the details page equals the name recorded from the grid
+5. The price on the details page equals the price recorded from the grid
+6. A non-empty description and an enabled ADD TO CART button are displayed"
+SL-04 Back from product details returns to an unchanged grid,Swag Labs Mobile > Product Grid,"The catalog grid, its layout toggle, and navigation into and back out of product details.","Back from product details returns to an unchanged grid.
+
+Legacy ID: SL-04
+Platforms: Android, iOS
+Automated by: ProductGridTest.testReturnFromDetailsToGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,"1. Log in with a valid user
+2. Record the ordered list of product names in the grid
+3. Open the second product card
+4. Tap the back control on the details page
+5. Record the ordered list of product names again
+6. Check the cart badge","1. Products page opens and the PRODUCTS header is displayed
+2. A list of 6 product names is captured
+3. The product details page opens for the selected product
+4. The Products page is displayed again with the PRODUCTS header
+5. The list matches the list recorded in step 2 exactly
+6. No cart badge count is displayed because nothing was added"
+SL-05 Sort by Name A to Z,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name A to Z.
+
+Legacy ID: SL-05
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameAscending
+Test data: Name (A to Z); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Open the sort selector
+3. Select Name (A to Z)
+4. Read the ordered list of product names
+5. Compare the list against the same names sorted ascending case-insensitively","1. Products page opens and the PRODUCTS header is displayed
+2. The sort options list is displayed with all four sort options
+3. The sort selector closes and the Products page is displayed
+4. Still exactly 6 product cards are displayed
+5. The displayed order equals the expected ascending order"
+SL-06 Sort by Name Z to A,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Name Z to A.
+
+Legacy ID: SL-06
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByNameDescending
+Test data: Name (Z to A); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Open the sort selector
+3. Select Name (Z to A)
+4. Read the ordered list of product names
+5. Compare the list against the same names sorted descending case-insensitively","1. Products page opens and the PRODUCTS header is displayed
+2. The sort options list is displayed with all four sort options
+3. The sort selector closes and the Products page is displayed
+4. Still exactly 6 product cards are displayed
+5. The displayed order equals the expected descending order"
+SL-07 Sort by Price low to high,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price low to high.
+
+Legacy ID: SL-07
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceAscending
+Test data: Price (low to high); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Open the sort selector
+3. Select Price (low to high)
+4. Read the ordered list of prices and parse them as numbers
+5. Verify each price is not greater than the next one","1. Products page opens and the PRODUCTS header is displayed
+2. The sort options list is displayed with all four sort options
+3. The sort selector closes and the Products page is displayed
+4. Six numeric prices are parsed successfully
+5. Prices are in non-decreasing order from first to last"
+SL-08 Sort by Price high to low,Swag Labs Mobile > Filtering,The four sort options and the order they impose on the grid.,"Sort by Price high to low.
+
+Legacy ID: SL-08
+Platforms: Android, iOS
+Automated by: ProductFilterTest.testSortByPriceDescending
+Test data: Price (high to low); standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Open the sort selector
+3. Select Price (high to low)
+4. Read the ordered list of prices and parse them as numbers
+5. Verify each price is not lower than the next one","1. Products page opens and the PRODUCTS header is displayed
+2. The sort options list is displayed with all four sort options
+3. The sort selector closes and the Products page is displayed
+4. Six numeric prices are parsed successfully
+5. Prices are in non-increasing order from first to last"
+SL-09 Add a single item from the grid updates the cart badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add a single item from the grid updates the cart badge.
+
+Legacy ID: SL-09
+Platforms: Android, iOS
+Automated by: CartTest.testAddSingleItemFromGrid
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Check the cart badge before adding anything
+3. Tap ADD TO CART on the first product card
+4. Read the cart badge
+5. Open the cart
+6. Compare the cart line item with the added product","1. Products page opens and the PRODUCTS header is displayed
+2. No cart badge count is displayed
+3. The button on that card changes to REMOVE
+4. The cart badge displays 1
+5. The cart page opens and displays exactly 1 line item
+6. The cart line item name and price match the product added in step 3"
+SL-10 Add an item from the product details page,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add an item from the product details page.
+
+Legacy ID: SL-10
+Platforms: Android, iOS
+Automated by: CartTest.testAddItemFromProductDetails
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Open the first product card
+3. Record the product name and price on the details page
+4. Tap ADD TO CART on the details page
+5. Open the cart from the details page
+6. Compare the cart line item with the recorded values","1. Products page opens and the PRODUCTS header is displayed
+2. The product details page opens
+3. Name and price values are captured
+4. The button changes to REMOVE and the cart badge displays 1
+5. The cart page opens and displays exactly 1 line item
+6. The cart line item name and price match the values recorded in step 3"
+SL-11 Add multiple items and verify cart contents match the badge,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Add multiple items and verify cart contents match the badge.
+
+Legacy ID: SL-11
+Platforms: Android, iOS
+Automated by: CartTest.testAddMultipleItemsToCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Tap ADD TO CART on the first product card
+3. Tap ADD TO CART on the second product card
+4. Tap ADD TO CART on the third product card
+5. Open the cart
+6. Compare the cart line item names with the three added products","1. Products page opens and the PRODUCTS header is displayed
+2. The cart badge displays 1
+3. The cart badge displays 2
+4. The cart badge displays 3
+5. The cart page opens and displays exactly 3 line items
+6. The cart contains exactly the three product names added in steps 2 to 4"
+SL-12 Remove an item from the cart,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Remove an item from the cart.
+
+Legacy ID: SL-12
+Platforms: Android, iOS
+Automated by: CartTest.testRemoveItemFromCart
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Add the first two product cards to the cart
+3. Open the cart
+4. Tap REMOVE on the first cart line item
+5. Read the cart badge
+6. Tap REMOVE on the remaining cart line item","1. Products page opens and the PRODUCTS header is displayed
+2. The cart badge displays 2
+3. The cart page opens and displays exactly 2 line items
+4. That line item disappears and exactly 1 line item remains
+5. The cart badge displays 1
+6. The cart is empty and no cart badge count is displayed"
+SL-13 Cart contents survive Continue Shopping,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Cart contents survive Continue Shopping.
+
+Legacy ID: SL-13
+Platforms: Android, iOS
+Automated by: CartTest.testCartPersistsAfterContinueShopping
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,"1. Log in with a valid user
+2. Add the first two product cards to the cart
+3. Open the cart and record the line item names
+4. Tap CONTINUE SHOPPING
+5. Read the cart badge on the Products page
+6. Reopen the cart and read the line item names","1. Products page opens and the PRODUCTS header is displayed
+2. The cart badge displays 2
+3. The cart page opens and 2 line item names are captured
+4. The Products page is displayed again with the PRODUCTS header
+5. The cart badge still displays 2
+6. The cart still contains exactly the 2 names recorded in step 3"
+SL-14 Menu exposes all expected navigation items,Swag Labs Mobile > Account,The navigation menu and logout.,"Menu exposes all expected navigation items.
+
+Legacy ID: SL-14
+Platforms: Android, iOS
+Automated by: AccountTest.testMenuItemsAreDisplayed
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P2,Automated,"1. Log in with a valid user
+2. Tap the hamburger menu control
+3. Check for the ALL ITEMS entry
+4. Check for the WEBVIEW and QR CODE SCANNER entries
+5. Check for the GEO LOCATION and DRAWING entries
+6. Check for the ABOUT RESET APP STATE and LOGOUT entries
+7. Close the menu","1. Products page opens and the PRODUCTS header is displayed
+2. The navigation menu opens
+3. The ALL ITEMS entry is displayed
+4. Both entries are displayed
+5. Both entries are displayed
+6. All three entries are displayed
+7. The menu closes and the Products page is displayed again"
+SL-15 Logout returns to the login screen with fields cleared,Swag Labs Mobile > Account,The navigation menu and logout.,"Logout returns to the login screen with fields cleared.
+
+Legacy ID: SL-15
+Platforms: Android, iOS
+Automated by: AccountTest.testLogoutReturnsToLoginPage
+Test data: standard_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Tap the hamburger menu control
+3. Tap LOGOUT
+4. Read the username field value
+5. Read the password field value
+6. Check that no error message is shown on the login page","1. Products page opens and the PRODUCTS header is displayed
+2. The navigation menu opens and the LOGOUT entry is displayed
+3. The login page opens with the username and password fields displayed
+4. The username field is empty
+5. The password field is empty
+6. No login error banner is displayed"
+SL-16 Every valid user in the pool can log in and reach Products,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Every valid user in the pool can log in and reach Products.
+
+Legacy ID: SL-16
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithAllValidUsers
+Test data: standard_user / problem_user",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with the valid user supplied by the data provider
+2. Verify the product grid rendered for this user
+3. Check that no login error banner is present
+4. Open the menu and tap LOGOUT
+5. Repeat steps 1 to 4 for every remaining user in the valid pool","1. Products page opens and the PRODUCTS header is displayed
+2. Exactly 6 product cards are displayed
+3. No login error banner is displayed
+4. The login page opens with empty username and password fields
+5. Every valid user in the pool (standard_user, problem_user) logs in successfully and logs out cleanly"
+SL-17 Invalid username is rejected with field and banner errors,Swag Labs Mobile > Login,"Authentication: the accounts this build accepts, and the rejection of one it does not.","Invalid username is rejected with field and banner errors.
+
+Legacy ID: SL-17
+Platforms: Android, iOS
+Automated by: LoginValidationTest.testLoginWithInvalidUsernameIsRejected
+Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched on the device,P1,Automated,"1. Open the app and confirm the login page is displayed
+2. Enter an invalid username and a valid password then tap LOGIN
+3. Check whether the Products page opened
+4. Check the error banner on the login page
+5. Inspect the username field
+6. Inspect the password field
+7. Inspect the border colour of the username field
+8. Inspect the border colour of the password field","1. The login page opens with username password and LOGIN controls displayed
+2. The login page remains displayed and no navigation occurs
+3. The Products page is NOT open
+4. The error banner is displayed with the text: Username and password do not match any user in this service.
+5. A cross (X) error icon is displayed inside the username field
+6. A cross (X) error icon is displayed inside the password field
+7. The username field border is rendered red
+8. The password field border is rendered red"
+SL-18 Successful checkout calculates totals and completes the purchase,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Successful checkout calculates totals and completes the purchase.
+
+Legacy ID: SL-18
+Platforms: Android, iOS
+Automated by: CartTest.testSuccessfulCheckoutCalculatesTotalsAndCompletesPurchase
+Test data: standard_user / secret_sauce; Test / User / 12345",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Add the first two products and record their names and displayed prices
+3. Open the cart and tap CHECKOUT
+4. Enter valid first name last name and postal code then tap CONTINUE
+5. Compare the overview line items with the products recorded from the UI
+6. Calculate the expected subtotal by summing the recorded UI prices
+7. Calculate tax at 8 percent from the expected subtotal and add it to the subtotal
+8. Tap FINISH
+9. Tap BACK HOME","1. Products page opens and the PRODUCTS header is displayed
+2. The cart badge displays 2 and the product values are captured from the UI
+3. The checkout information page opens
+4. The checkout overview page opens
+5. The same product names and displayed prices appear in the overview
+6. The displayed item subtotal equals the calculated subtotal
+7. The displayed tax and total equal the values calculated from the UI prices
+8. The checkout complete page opens and BACK HOME is displayed
+9. The Products page opens and the cart badge is cleared"
+SL-19 Checkout requires a first name,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Checkout requires a first name.
+
+Legacy ID: SL-19
+Platforms: Android, iOS
+Automated by: CartTest.testCheckoutRequiresFirstName
+Test data: standard_user / secret_sauce; User / 12345",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user and add the first product
+2. Open the cart and tap CHECKOUT
+3. Leave First Name empty
+4. Enter a valid last name and postal code
+5. Tap CONTINUE
+6. Read the error banner","1. The Products page opens and the cart badge displays 1
+2. The checkout information page opens
+3. The First Name field remains empty
+4. The Last Name and Zip/Postal Code fields contain the entered values
+5. The checkout information page remains open
+6. The error banner displays First Name is required"
+SL-20 Checkout requires a last name,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Checkout requires a last name.
+
+Legacy ID: SL-20
+Platforms: Android, iOS
+Automated by: CartTest.testCheckoutRequiresLastName
+Test data: standard_user / secret_sauce; Test / 12345",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user and add the first product
+2. Open the cart and tap CHECKOUT
+3. Enter a valid first name and postal code
+4. Leave Last Name empty
+5. Tap CONTINUE
+6. Read the error banner","1. The Products page opens and the cart badge displays 1
+2. The checkout information page opens
+3. The First Name and Zip/Postal Code fields contain the entered values
+4. The Last Name field remains empty
+5. The checkout information page remains open
+6. The error banner displays Last Name is required"
+SL-21 Checkout requires a postal code,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Checkout requires a postal code.
+
+Legacy ID: SL-21
+Platforms: Android, iOS
+Automated by: CartTest.testCheckoutRequiresPostalCode
+Test data: standard_user / secret_sauce; Test / User",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user and add the first product
+2. Open the cart and tap CHECKOUT
+3. Enter a valid first name and last name
+4. Leave Zip/Postal Code empty
+5. Tap CONTINUE
+6. Read the error banner","1. The Products page opens and the cart badge displays 1
+2. The checkout information page opens
+3. The First Name and Last Name fields contain the entered values
+4. The Zip/Postal Code field remains empty
+5. The checkout information page remains open
+6. The error banner displays Postal Code is required"
+SL-22 Cancelling checkout preserves the cart,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Cancelling checkout preserves the cart.
+
+Legacy ID: SL-22
+Platforms: Android, iOS
+Automated by: CartTest.testCheckoutCancelPreservesCart
+Test data: standard_user / secret_sauce; Test / User / 12345",Swag Labs app is installed and launched on the device,P2,Automated,"1. Log in with a valid user and add the first product while recording its UI values
+2. Open the cart and tap CHECKOUT
+3. Tap CANCEL on checkout information
+4. Reopen the cart and compare its item with the recorded UI values
+5. Return to checkout and submit valid customer information
+6. Tap CANCEL on checkout overview
+7. Reopen the cart and compare its item with the recorded UI values","1. The Products page opens and the cart badge displays 1
+2. The checkout information page opens
+3. The Products page opens and the cart badge still displays 1
+4. The cart still contains the same product name and displayed price
+5. The checkout overview page opens
+6. The Products page opens and the cart badge still displays 1
+7. The cart still contains the same product name and displayed price"

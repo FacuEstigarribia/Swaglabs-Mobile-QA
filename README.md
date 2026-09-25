@@ -181,7 +181,20 @@ generated rather than maintained by hand:
 
 ```bash
 python3 docs/generate_zebrunner_import.py   # writes docs/zebrunner-test-cases.csv
+
+# Generate an import containing only selected cases, avoiding duplicates on repeat imports.
+python3 docs/generate_zebrunner_import.py --ids SL-18,SL-19,SL-20,SL-21,SL-22
 ```
+
+For import targets that require one row per test case and a numbered multiline
+`Step Action` field, generate the formatted import instead:
+
+```bash
+python3 docs/test_cases_formatted_import.py --ids SL-18,SL-19,SL-20,SL-21,SL-22
+```
+
+This writes `docs/test-cases-formatted-import.csv`, preserving the nested suite path from
+`docs/test-cases-formatted.csv` and renaming its `Step` column to `Step Action`.
 
 Upload the result on the project's **Test Cases** page (*Import > CSV*). The mapping it applies:
 

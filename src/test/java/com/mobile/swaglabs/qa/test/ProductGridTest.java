@@ -4,6 +4,7 @@ import static com.mobile.swaglabs.qa.enums.UserPool.VALID_USERS_POOL;
 
 import java.util.List;
 
+import com.zebrunner.agent.core.annotation.TestCaseKey;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -24,6 +25,7 @@ public class ProductGridTest extends SwagLabsBaseTest {
     @Test(description = "Product grid shows all catalog items")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-101")
     @TestTag(name = "tcId", value = "SL-01")
     @TestTag(name = "feature", value = "Product Grid")
     public void testProductGridDisplaysAllItems() {
@@ -55,6 +57,7 @@ public class ProductGridTest extends SwagLabsBaseTest {
     @Test(description = "Grid and list view toggle changes layout and preserves items")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P2)
+    @TestCaseKey(value = "SAUCEM-102")
     @TestTag(name = "tcId", value = "SL-02")
     @TestTag(name = "feature", value = "Product Grid")
     public void testToggleGridAndListView() {
@@ -82,6 +85,7 @@ public class ProductGridTest extends SwagLabsBaseTest {
     @Test(description = "Opening a product shows matching details")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P1)
+    @TestCaseKey(value = "SAUCEM-103")
     @TestTag(name = "tcId", value = "SL-03")
     @TestTag(name = "feature", value = "Product Grid")
     public void testOpenProductDetailsFromGrid() {
@@ -108,6 +112,7 @@ public class ProductGridTest extends SwagLabsBaseTest {
     @Test(description = "Back from product details returns to an unchanged grid")
     @MethodOwner(owner = "festigarribia")
     @TestPriority(Priority.P2)
+    @TestCaseKey(value = "SAUCEM-104")
     @TestTag(name = "tcId", value = "SL-04")
     @TestTag(name = "feature", value = "Product Grid")
     public void testReturnFromDetailsToGrid() {

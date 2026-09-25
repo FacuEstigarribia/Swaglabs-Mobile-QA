@@ -208,4 +208,11 @@ public abstract class CartPage extends SwagLabsAbstractPage {
         tap(buttonContinueShopping);
         return initPage(getDriver(), ProductsPage.class);
     }
+
+    public CheckoutInformationPage checkout() {
+        LOGGER.info("Starting checkout.");
+        revealActions();
+        tap(buttonCheckout);
+        return initPage(getDriver(), CheckoutInformationPage.class);
+    }
 }

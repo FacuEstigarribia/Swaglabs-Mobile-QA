@@ -19,6 +19,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Parameters;
 
 import com.mobile.swaglabs.qa.retry.RetryCountAnalyzer;
+import com.mobile.swaglabs.qa.service.CheckoutService;
 import com.mobile.swaglabs.qa.service.LoginService;
 import com.mobile.swaglabs.qa.service.UsersPool;
 import com.zebrunner.agent.core.webdriver.RemoteWebDriverFactory;
@@ -158,6 +159,10 @@ public class SwagLabsBaseTest extends AbstractTest implements IConstants {
     /** A login service bound to the current thread's driver. */
     public LoginService getLoginService() {
         return new LoginService(getDriver());
+    }
+
+    public CheckoutService getCheckoutService() {
+        return new CheckoutService(getDriver());
     }
 
     /**
