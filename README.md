@@ -55,11 +55,11 @@ The first iOS run builds WebDriverAgent, which takes several minutes; later runs
 Suites live in `src/test/resources/testng_suites/` and are selected with `-Dsuite=`.
 
 ```bash
-# Regression - the full 17 cases
+# Regression - the full 22 cases
 mvn clean test -Dsuite=regression       
 mvn clean test -Dsuite=ios_regression   
 
-# Smoke - two cases, enough to prove the rig works
+# Smoke - three cases, enough to prove the rig works
 mvn clean test -Dsuite=smoke
 mvn clean test -Dsuite=ios_smoke
 
@@ -176,11 +176,12 @@ mvn clean test -Dsuite=smoke -Dreporting.enabled=true
 
 ### Test cases
 
-`docs/test-cases.csv` stays the source of truth. The importer takes a different shape, so it is
-generated rather than maintained by hand:
+`docs/test-cases-formatted.csv` is the canonical one-row-per-case source. The two supported
+Zebrunner import shapes are generated rather than maintained by hand:
 
 ```bash
 python3 docs/generate_zebrunner_import.py   # writes docs/zebrunner-test-cases.csv
+python3 docs/test_cases_formatted_import.py # writes docs/test-cases-formatted-import.csv
 
 # Generate an import containing only selected cases, avoiding duplicates on repeat imports.
 python3 docs/generate_zebrunner_import.py --ids SL-18,SL-19,SL-20,SL-21,SL-22
@@ -198,15 +199,13 @@ This writes `docs/test-cases-formatted-import.csv`, preserving the nested suite 
 
 Upload the result on the project's **Test Cases** page (*Import > CSV*). The mapping it applies:
 
-| `test-cases.csv` | Zebrunner |
+| `test-cases-formatted.csv` | Zebrunner step-per-row export |
 |---|---|
-| `Title`, prefixed with `TC_ID` | `Title` — Zebrunner assigns its own `SAUCEM-nn` keys, so `SL-nn` is kept in the title to stay searchable |
-| `Area` | `Suite`, nested as `Swag Labs Mobile > <Area>` (missing suites are created on import) |
-| `Precondition` | `Pre-conditions` |
-| `Priority` | `Priority` — `P1`/`P2` verbatim; unknown values are created on import |
-| `Action` (+ `Test Data` inlined) | `Step`, one per row |
-| `Expected Result` | `Expected Result` |
-| `Platform`, `Automated Method`, `TC_ID` | folded into `Description` — the importer ignores columns it does not recognise |
+| `Title`, including `SL-nn` | `Title`, repeated on each step row |
+| `Suite` | `Suite`, including the nested `Swag Labs Mobile > <Area>` path |
+| `Description`, `Pre-conditions`, `Priority`, `Automation State` | copied unchanged |
+| numbered multiline `Step` | one unnumbered `Step` per row |
+| numbered multiline `Expected Result` | the matching unnumbered result per row |
 
 Once the cases exist, add `@TestCaseKey("SAUCEM-nn")` to each `@Test` so results land against them.
 
@@ -243,7 +242,7 @@ parameter signals.
 ## Project structure
 
 ```
-docs/test-cases.csv                     Source of truth for the test design (one row per step)
+docs/test-cases-formatted.csv           Source of truth for the test design (one row per case)
 docs/locator-reference.md               Accessibility ids and the platform differences, from live dumps
 docs/generate_readme_cases.py           Regenerates this file's test-case section from the CSV
 docs/generate_zebrunner_import.py       Reshapes the CSV for Zebrunner's test-case importer
@@ -346,3 +345,405 @@ reported together rather than failing at the first one. Every `SoftAssert` ends 
 
 **Assertion messages** live as constants in `IConstants` when reused, end with `!`, and name the
 subject being asserted.
+
+## Test cases
+
+22 cases cover the product grid, filtering, cart, checkout, account, and login.
+`docs/test-cases-formatted.csv` is the source of truth. After editing it, regenerate the catalog
+and both Zebrunner import formats:
+
+```bash
+python3 docs/generate_readme_cases.py
+python3 docs/generate_zebrunner_import.py
+python3 docs/test_cases_formatted_import.py
+```
+
+<!-- BEGIN GENERATED TEST CASES -->
+
+### Product Grid
+
+#### SL-01 — Product grid shows all catalog items
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `ProductGridTest.testProductGridDisplaysAllItems`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Count the product cards rendered in the grid | Exactly 6 product cards are displayed |
+| 3 | Read the product name on every card | Every card shows a non-empty product name |
+| 4 | Read the price label on every card | Every price matches the format $X.XX |
+| 5 | Check that every card renders a product image | An image element is present and displayed on every card |
+| 6 | Check that every card exposes an ADD TO CART control | An enabled ADD TO CART button is present on every card |
+
+#### SL-02 — Grid and list view toggle changes layout and preserves items
+
+- **Priority:** P2
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `ProductGridTest.testToggleGridAndListView`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Record the ordered list of product names in the default view | A list of 6 product names is captured |
+| 3 | Tap the view toggle control | The layout switches to the alternate view and the toggle remains displayed |
+| 4 | Record the ordered list of product names in the toggled view | Still exactly 6 product cards are displayed |
+| 5 | Compare the two recorded name lists | Both lists contain the same 6 names in the same order |
+| 6 | Tap the view toggle control again | The layout returns to the original view with the same 6 products |
+
+#### SL-03 — Opening a product shows matching details
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `ProductGridTest.testOpenProductDetailsFromGrid`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Record the name and price of the first product card | Name and price values are captured from the grid |
+| 3 | Tap the first product card | The product details page opens |
+| 4 | Compare the details page name with the recorded grid name | The product name on the details page equals the name recorded from the grid |
+| 5 | Compare the details page price with the recorded grid price | The price on the details page equals the price recorded from the grid |
+| 6 | Inspect the description and ADD TO CART control on the details page | A non-empty description and an enabled ADD TO CART button are displayed |
+
+#### SL-04 — Back from product details returns to an unchanged grid
+
+- **Priority:** P2
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `ProductGridTest.testReturnFromDetailsToGrid`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Record the ordered list of product names in the grid | A list of 6 product names is captured |
+| 3 | Open the second product card | The product details page opens for the selected product |
+| 4 | Tap the back control on the details page | The Products page is displayed again with the PRODUCTS header |
+| 5 | Record the ordered list of product names again | The list matches the list recorded in step 2 exactly |
+| 6 | Check the cart badge | No cart badge count is displayed because nothing was added |
+
+### Filtering
+
+#### SL-05 — Sort by Name A to Z
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** Name (A to Z); standard_user / secret_sauce
+- **Automated by:** `ProductFilterTest.testSortByNameAscending`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Open the sort selector | The sort options list is displayed with all four sort options |
+| 3 | Select Name (A to Z) | The sort selector closes and the Products page is displayed |
+| 4 | Read the ordered list of product names | Still exactly 6 product cards are displayed |
+| 5 | Compare the list against the same names sorted ascending case-insensitively | The displayed order equals the expected ascending order |
+
+#### SL-06 — Sort by Name Z to A
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** Name (Z to A); standard_user / secret_sauce
+- **Automated by:** `ProductFilterTest.testSortByNameDescending`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Open the sort selector | The sort options list is displayed with all four sort options |
+| 3 | Select Name (Z to A) | The sort selector closes and the Products page is displayed |
+| 4 | Read the ordered list of product names | Still exactly 6 product cards are displayed |
+| 5 | Compare the list against the same names sorted descending case-insensitively | The displayed order equals the expected descending order |
+
+#### SL-07 — Sort by Price low to high
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** Price (low to high); standard_user / secret_sauce
+- **Automated by:** `ProductFilterTest.testSortByPriceAscending`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Open the sort selector | The sort options list is displayed with all four sort options |
+| 3 | Select Price (low to high) | The sort selector closes and the Products page is displayed |
+| 4 | Read the ordered list of prices and parse them as numbers | Six numeric prices are parsed successfully |
+| 5 | Verify each price is not greater than the next one | Prices are in non-decreasing order from first to last |
+
+#### SL-08 — Sort by Price high to low
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** Price (high to low); standard_user / secret_sauce
+- **Automated by:** `ProductFilterTest.testSortByPriceDescending`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Open the sort selector | The sort options list is displayed with all four sort options |
+| 3 | Select Price (high to low) | The sort selector closes and the Products page is displayed |
+| 4 | Read the ordered list of prices and parse them as numbers | Six numeric prices are parsed successfully |
+| 5 | Verify each price is not lower than the next one | Prices are in non-increasing order from first to last |
+
+### Cart
+
+#### SL-09 — Add a single item from the grid updates the cart badge
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `CartTest.testAddSingleItemFromGrid`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Check the cart badge before adding anything | No cart badge count is displayed |
+| 3 | Tap ADD TO CART on the first product card | The button on that card changes to REMOVE |
+| 4 | Read the cart badge | The cart badge displays 1 |
+| 5 | Open the cart | The cart page opens and displays exactly 1 line item |
+| 6 | Compare the cart line item with the added product | The cart line item name and price match the product added in step 3 |
+
+#### SL-10 — Add an item from the product details page
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `CartTest.testAddItemFromProductDetails`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Open the first product card | The product details page opens |
+| 3 | Record the product name and price on the details page | Name and price values are captured |
+| 4 | Tap ADD TO CART on the details page | The button changes to REMOVE and the cart badge displays 1 |
+| 5 | Open the cart from the details page | The cart page opens and displays exactly 1 line item |
+| 6 | Compare the cart line item with the recorded values | The cart line item name and price match the values recorded in step 3 |
+
+#### SL-11 — Add multiple items and verify cart contents match the badge
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `CartTest.testAddMultipleItemsToCart`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Tap ADD TO CART on the first product card | The cart badge displays 1 |
+| 3 | Tap ADD TO CART on the second product card | The cart badge displays 2 |
+| 4 | Tap ADD TO CART on the third product card | The cart badge displays 3 |
+| 5 | Open the cart | The cart page opens and displays exactly 3 line items |
+| 6 | Compare the cart line item names with the three added products | The cart contains exactly the three product names added in steps 2 to 4 |
+
+#### SL-12 — Remove an item from the cart
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `CartTest.testRemoveItemFromCart`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Add the first two product cards to the cart | The cart badge displays 2 |
+| 3 | Open the cart | The cart page opens and displays exactly 2 line items |
+| 4 | Tap REMOVE on the first cart line item | That line item disappears and exactly 1 line item remains |
+| 5 | Read the cart badge | The cart badge displays 1 |
+| 6 | Tap REMOVE on the remaining cart line item | The cart is empty and no cart badge count is displayed |
+
+#### SL-13 — Cart contents survive Continue Shopping
+
+- **Priority:** P2
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `CartTest.testCartPersistsAfterContinueShopping`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Add the first two product cards to the cart | The cart badge displays 2 |
+| 3 | Open the cart and record the line item names | The cart page opens and 2 line item names are captured |
+| 4 | Tap CONTINUE SHOPPING | The Products page is displayed again with the PRODUCTS header |
+| 5 | Read the cart badge on the Products page | The cart badge still displays 2 |
+| 6 | Reopen the cart and read the line item names | The cart still contains exactly the 2 names recorded in step 3 |
+
+#### SL-18 — Successful checkout calculates totals and completes the purchase
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce; Test / User / 12345
+- **Automated by:** `CartTest.testSuccessfulCheckoutCalculatesTotalsAndCompletesPurchase`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Add the first two products and record their names and displayed prices | The cart badge displays 2 and the product values are captured from the UI |
+| 3 | Open the cart and tap CHECKOUT | The checkout information page opens |
+| 4 | Enter valid first name last name and postal code then tap CONTINUE | The checkout overview page opens |
+| 5 | Compare the overview line items with the products recorded from the UI | The same product names and displayed prices appear in the overview |
+| 6 | Calculate the expected subtotal by summing the recorded UI prices | The displayed item subtotal equals the calculated subtotal |
+| 7 | Calculate tax at 8 percent from the expected subtotal and add it to the subtotal | The displayed tax and total equal the values calculated from the UI prices |
+| 8 | Tap FINISH | The checkout complete page opens and BACK HOME is displayed |
+| 9 | Tap BACK HOME | The Products page opens and the cart badge is cleared |
+
+#### SL-19 — Checkout requires a first name
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce; User / 12345
+- **Automated by:** `CartTest.testCheckoutRequiresFirstName`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user and add the first product | The Products page opens and the cart badge displays 1 |
+| 2 | Open the cart and tap CHECKOUT | The checkout information page opens |
+| 3 | Leave First Name empty | The First Name field remains empty |
+| 4 | Enter a valid last name and postal code | The Last Name and Zip/Postal Code fields contain the entered values |
+| 5 | Tap CONTINUE | The checkout information page remains open |
+| 6 | Read the error banner | The error banner displays First Name is required |
+
+#### SL-20 — Checkout requires a last name
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce; Test / 12345
+- **Automated by:** `CartTest.testCheckoutRequiresLastName`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user and add the first product | The Products page opens and the cart badge displays 1 |
+| 2 | Open the cart and tap CHECKOUT | The checkout information page opens |
+| 3 | Enter a valid first name and postal code | The First Name and Zip/Postal Code fields contain the entered values |
+| 4 | Leave Last Name empty | The Last Name field remains empty |
+| 5 | Tap CONTINUE | The checkout information page remains open |
+| 6 | Read the error banner | The error banner displays Last Name is required |
+
+#### SL-21 — Checkout requires a postal code
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce; Test / User
+- **Automated by:** `CartTest.testCheckoutRequiresPostalCode`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user and add the first product | The Products page opens and the cart badge displays 1 |
+| 2 | Open the cart and tap CHECKOUT | The checkout information page opens |
+| 3 | Enter a valid first name and last name | The First Name and Last Name fields contain the entered values |
+| 4 | Leave Zip/Postal Code empty | The Zip/Postal Code field remains empty |
+| 5 | Tap CONTINUE | The checkout information page remains open |
+| 6 | Read the error banner | The error banner displays Postal Code is required |
+
+#### SL-22 — Cancelling checkout preserves the cart
+
+- **Priority:** P2
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce; Test / User / 12345
+- **Automated by:** `CartTest.testCheckoutCancelPreservesCart`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user and add the first product while recording its UI values | The Products page opens and the cart badge displays 1 |
+| 2 | Open the cart and tap CHECKOUT | The checkout information page opens |
+| 3 | Tap CANCEL on checkout information | The Products page opens and the cart badge still displays 1 |
+| 4 | Reopen the cart and compare its item with the recorded UI values | The cart still contains the same product name and displayed price |
+| 5 | Return to checkout and submit valid customer information | The checkout overview page opens |
+| 6 | Tap CANCEL on checkout overview | The Products page opens and the cart badge still displays 1 |
+| 7 | Reopen the cart and compare its item with the recorded UI values | The cart still contains the same product name and displayed price |
+
+### Account
+
+#### SL-14 — Menu exposes all expected navigation items
+
+- **Priority:** P2
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `AccountTest.testMenuItemsAreDisplayed`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Tap the hamburger menu control | The navigation menu opens |
+| 3 | Check for the ALL ITEMS entry | The ALL ITEMS entry is displayed |
+| 4 | Check for the WEBVIEW and QR CODE SCANNER entries | Both entries are displayed |
+| 5 | Check for the GEO LOCATION and DRAWING entries | Both entries are displayed |
+| 6 | Check for the ABOUT RESET APP STATE and LOGOUT entries | All three entries are displayed |
+| 7 | Close the menu | The menu closes and the Products page is displayed again |
+
+#### SL-15 — Logout returns to the login screen with fields cleared
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / secret_sauce
+- **Automated by:** `AccountTest.testLogoutReturnsToLoginPage`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with a valid user | Products page opens and the PRODUCTS header is displayed |
+| 2 | Tap the hamburger menu control | The navigation menu opens and the LOGOUT entry is displayed |
+| 3 | Tap LOGOUT | The login page opens with the username and password fields displayed |
+| 4 | Read the username field value | The username field is empty |
+| 5 | Read the password field value | The password field is empty |
+| 6 | Check that no error message is shown on the login page | No login error banner is displayed |
+
+### Login
+
+#### SL-16 — Every valid user in the pool can log in and reach Products
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** standard_user / problem_user
+- **Automated by:** `LoginValidationTest.testLoginWithAllValidUsers`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Log in with the valid user supplied by the data provider | Products page opens and the PRODUCTS header is displayed |
+| 2 | Verify the product grid rendered for this user | Exactly 6 product cards are displayed |
+| 3 | Check that no login error banner is present | No login error banner is displayed |
+| 4 | Open the menu and tap LOGOUT | The login page opens with empty username and password fields |
+| 5 | Repeat steps 1 to 4 for every remaining user in the valid pool | Every valid user in the pool (standard_user, problem_user) logs in successfully and logs out cleanly |
+
+#### SL-17 — Invalid username is rejected with field and banner errors
+
+- **Priority:** P1
+- **Precondition:** Swag Labs app is installed and launched on the device
+- **Platforms:** Android, iOS
+- **Test data:** invalid_user / secret_sauce
+- **Automated by:** `LoginValidationTest.testLoginWithInvalidUsernameIsRejected`
+
+| # | Action | Expected Result |
+|---|--------|-----------------|
+| 1 | Open the app and confirm the login page is displayed | The login page opens with username password and LOGIN controls displayed |
+| 2 | Enter an invalid username and a valid password then tap LOGIN | The login page remains displayed and no navigation occurs |
+| 3 | Check whether the Products page opened | The Products page is NOT open |
+| 4 | Check the error banner on the login page | The error banner is displayed with the text: Username and password do not match any user in this service. |
+| 5 | Inspect the username field | A cross (X) error icon is displayed inside the username field |
+| 6 | Inspect the password field | A cross (X) error icon is displayed inside the password field |
+| 7 | Inspect the border colour of the username field | The username field border is rendered red |
+| 8 | Inspect the border colour of the password field | The password field border is rendered red |
+
+<!-- END GENERATED TEST CASES -->
