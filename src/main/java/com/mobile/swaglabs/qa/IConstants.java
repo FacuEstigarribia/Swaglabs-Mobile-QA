@@ -33,12 +33,22 @@ public interface IConstants {
 
     /** Exact banner text the app shows for credentials it does not recognise. */
     String LOGIN_ERROR_MESSAGE = "Username and password do not match any user in this service.";
+    String CHECKOUT_FIRST_NAME = "Test";
+    String CHECKOUT_LAST_NAME = "User";
+    String CHECKOUT_POSTAL_CODE = "12345";
+    String CHECKOUT_TAX_RATE = "0.08";
+    String FIRST_NAME_REQUIRED_ERROR = "First Name is required";
+    String LAST_NAME_REQUIRED_ERROR = "Last Name is required";
+    String POSTAL_CODE_REQUIRED_ERROR = "Postal Code is required";
 
     //=================== Page-opened messages ======//
     String LOGIN_PAGE_NOT_OPENED = "Login page is not opened!";
     String PRODUCTS_PAGE_NOT_OPENED = "Products page is not opened!";
     String PRODUCT_DETAILS_PAGE_NOT_OPENED = "Product details page is not opened!";
     String CART_PAGE_NOT_OPENED = "Cart page is not opened!";
+    String CHECKOUT_INFORMATION_PAGE_NOT_OPENED = "Checkout information page is not opened!";
+    String CHECKOUT_OVERVIEW_PAGE_NOT_OPENED = "Checkout overview page is not opened!";
+    String CHECKOUT_COMPLETE_PAGE_NOT_OPENED = "Checkout complete page is not opened!";
     String MENU_NOT_OPENED = "Navigation menu is not opened!";
 
     //=================== Content messages ==========//

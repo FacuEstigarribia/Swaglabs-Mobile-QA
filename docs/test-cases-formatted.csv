@@ -267,3 +267,91 @@ Test data: invalid_user / secret_sauce",Swag Labs app is installed and launched 
 6. A cross (X) error icon is displayed inside the password field
 7. The username field border is rendered red
 8. The password field border is rendered red"
+SL-18 Successful checkout calculates totals and completes the purchase,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Successful checkout calculates totals and completes the purchase.
+
+Legacy ID: SL-18
+Platforms: Android, iOS
+Automated by: CartTest.testSuccessfulCheckoutCalculatesTotalsAndCompletesPurchase
+Test data: standard_user / secret_sauce; Test / User / 12345",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user
+2. Add the first two products and record their names and displayed prices
+3. Open the cart and tap CHECKOUT
+4. Enter valid first name last name and postal code then tap CONTINUE
+5. Compare the overview line items with the products recorded from the UI
+6. Calculate the expected subtotal by summing the recorded UI prices
+7. Calculate tax at 8 percent from the expected subtotal and add it to the subtotal
+8. Tap FINISH
+9. Tap BACK HOME","1. Products page opens and the PRODUCTS header is displayed
+2. The cart badge displays 2 and the product values are captured from the UI
+3. The checkout information page opens
+4. The checkout overview page opens
+5. The same product names and displayed prices appear in the overview
+6. The displayed item subtotal equals the calculated subtotal
+7. The displayed tax and total equal the values calculated from the UI prices
+8. The checkout complete page opens and BACK HOME is displayed
+9. The Products page opens and the cart badge is cleared"
+SL-19 Checkout requires a first name,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Checkout requires a first name.
+
+Legacy ID: SL-19
+Platforms: Android, iOS
+Automated by: CartTest.testCheckoutRequiresFirstName
+Test data: standard_user / secret_sauce; User / 12345",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user and add the first product
+2. Open the cart and tap CHECKOUT
+3. Leave First Name empty
+4. Enter a valid last name and postal code
+5. Tap CONTINUE
+6. Read the error banner","1. The Products page opens and the cart badge displays 1
+2. The checkout information page opens
+3. The First Name field remains empty
+4. The Last Name and Zip/Postal Code fields contain the entered values
+5. The checkout information page remains open
+6. The error banner displays First Name is required"
+SL-20 Checkout requires a last name,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Checkout requires a last name.
+
+Legacy ID: SL-20
+Platforms: Android, iOS
+Automated by: CartTest.testCheckoutRequiresLastName
+Test data: standard_user / secret_sauce; Test / 12345",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user and add the first product
+2. Open the cart and tap CHECKOUT
+3. Enter a valid first name and postal code
+4. Leave Last Name empty
+5. Tap CONTINUE
+6. Read the error banner","1. The Products page opens and the cart badge displays 1
+2. The checkout information page opens
+3. The First Name and Zip/Postal Code fields contain the entered values
+4. The Last Name field remains empty
+5. The checkout information page remains open
+6. The error banner displays Last Name is required"
+SL-21 Checkout requires a postal code,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Checkout requires a postal code.
+
+Legacy ID: SL-21
+Platforms: Android, iOS
+Automated by: CartTest.testCheckoutRequiresPostalCode
+Test data: standard_user / secret_sauce; Test / User",Swag Labs app is installed and launched on the device,P1,Automated,"1. Log in with a valid user and add the first product
+2. Open the cart and tap CHECKOUT
+3. Enter a valid first name and last name
+4. Leave Zip/Postal Code empty
+5. Tap CONTINUE
+6. Read the error banner","1. The Products page opens and the cart badge displays 1
+2. The checkout information page opens
+3. The First Name and Last Name fields contain the entered values
+4. The Zip/Postal Code field remains empty
+5. The checkout information page remains open
+6. The error banner displays Postal Code is required"
+SL-22 Cancelling checkout preserves the cart,Swag Labs Mobile > Cart,"Adding and removing items, the cart badge, and cart contents across navigation.","Cancelling checkout preserves the cart.
+
+Legacy ID: SL-22
+Platforms: Android, iOS
+Automated by: CartTest.testCheckoutCancelPreservesCart
+Test data: standard_user / secret_sauce; Test / User / 12345",Swag Labs app is installed and launched on the device,P2,Automated,"1. Log in with a valid user and add the first product while recording its UI values
+2. Open the cart and tap CHECKOUT
+3. Tap CANCEL on checkout information
+4. Reopen the cart and compare its item with the recorded UI values
+5. Return to checkout and submit valid customer information
+6. Tap CANCEL on checkout overview
+7. Reopen the cart and compare its item with the recorded UI values","1. The Products page opens and the cart badge displays 1
+2. The checkout information page opens
+3. The Products page opens and the cart badge still displays 1
+4. The cart still contains the same product name and displayed price
+5. The checkout overview page opens
+6. The Products page opens and the cart badge still displays 1
+7. The cart still contains the same product name and displayed price"

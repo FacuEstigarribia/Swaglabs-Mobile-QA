@@ -3,6 +3,8 @@
 
 Keeps the CSV as the single source of truth. Run after editing it:
     python3 docs/generate_zebrunner_import.py
+To generate an import containing only specific cases:
+    python3 docs/generate_zebrunner_import.py --ids SL-18,SL-19,SL-20,SL-21,SL-22
 The result is written to docs/zebrunner-test-cases.csv and uploaded by hand on the
 project's Test Cases page (Import > CSV).
 
@@ -17,6 +19,7 @@ values are repeated on every row of a case rather than left blank after the firs
 the importer groups rows by Title, and identical values are unambiguous under either
 reading of that grouping.
 """
+import argparse
 import csv
 import pathlib
 import re
@@ -53,6 +56,18 @@ AREA_DESCRIPTIONS = {
 AUTOMATION_STATE = "Automated"
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Generate a Zebrunner TCM import CSV from docs/test-cases.csv."
+    )
+    parser.add_argument(
+        "--ids",
+        metavar="SL-01,SL-02",
+        help="comma-separated test case IDs to include; omit to include every case",
+    )
+    return parser.parse_args()
+
+
 def find_test_classes():
     """Map each automated method name to the test class that declares it."""
     owners = {}
@@ -69,6 +84,22 @@ def read_cases():
             case = cases.setdefault(row["TC_ID"], {"meta": row, "steps": []})
             case["steps"].append(row)
     return cases
+
+
+def select_cases(cases, ids):
+    """Return only requested cases, preserving their order in the source CSV."""
+    if ids is None:
+        return cases
+
+    requested = {case_id.strip() for case_id in ids.split(",") if case_id.strip()}
+    if not requested:
+        raise SystemExit("--ids must contain at least one test case ID.")
+
+    unknown = requested - set(cases)
+    if unknown:
+        raise SystemExit(f"Unknown test case IDs: {', '.join(sorted(unknown))}")
+
+    return OrderedDict((case_id, case) for case_id, case in cases.items() if case_id in requested)
 
 
 def describe(meta, steps, owners):
@@ -101,11 +132,11 @@ def step_text(step):
     return f"{action} (test data: {data})" if data else action
 
 
-def build_rows(cases, owners):
+def build_rows(cases, owners, require_all_areas=True):
     rows = []
     for area in AREA_ORDER:
         in_area = [case for case in cases.values() if case["meta"]["Area"] == area]
-        if not in_area:
+        if require_all_areas and not in_area:
             raise SystemExit(f"No cases found for area '{area}'; check AREA_ORDER.")
         for case in in_area:
             meta = case["meta"]
@@ -134,8 +165,9 @@ def build_rows(cases, owners):
 
 
 def main():
-    cases = read_cases()
-    rows = build_rows(cases, find_test_classes())
+    args = parse_args()
+    cases = select_cases(read_cases(), args.ids)
+    rows = build_rows(cases, find_test_classes(), require_all_areas=args.ids is None)
     with OUT_PATH.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=COLUMNS)
         writer.writeheader()
