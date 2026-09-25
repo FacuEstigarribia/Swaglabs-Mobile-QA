@@ -114,8 +114,8 @@ Worth knowing before changing configuration, because it is spread across four fi
 - **Suites list classes explicitly.** A new test class must be added to both `android.xml` and
   `ios.xml`, and the `ScreenshotOnFailureListener` is registered per suite XML too.
 - **Test metadata.** Every `@Test` carries `@MethodOwner`, `@TestPriority`, and
-  `@TestTag(tcId=SL-nn)` + `@TestTag(feature=…)`. `docs/test-cases.csv` is the source of truth for
-  the case design; the README's case section is generated from it.
+  `@TestTag(tcId=SL-nn)` + `@TestTag(feature=…)`. `docs/test-cases-formatted.csv` is the source of
+  truth for the case design; the README and both Zebrunner imports are generated from it.
 - **Zebrunner.** Three separate things, none of which needs a new dependency — `carina-core` already
   brings `agent-core`, so `agent.properties`, `@TestCaseKey` and `RemoteWebDriverFactory` are on the
   classpath.
@@ -142,10 +142,11 @@ Worth knowing before changing configuration, because it is spread across four fi
   - *Case linkage.* `@TestCaseKey("SAUCEM-nn")` on a `@Test` reports its result against the imported
     TCM case. Prefer the annotation over `TestCase.setTestCaseKey` from a listener: the agent reads
     it when it starts the test, whereas a second `IInvokedMethodListener` would be racing it.
-  - *Case migration.* `docs/generate_zebrunner_import.py` reshapes `docs/test-cases.csv` into
-    `docs/zebrunner-test-cases.csv` for the TCM importer (`Title` + `Suite` mandatory; one step per
-    row is supported; unrecognised columns are ignored, which is why `TC_ID` is prefixed onto the
-    title and Platform/Test Data/Automated Method are folded into the description and step text).
+  - *Case migration.* `docs/generate_zebrunner_import.py` reshapes
+    `docs/test-cases-formatted.csv` into `docs/zebrunner-test-cases.csv` for the TCM importer by
+    expanding its numbered multiline steps into one row per step. The alternate
+    `docs/test_cases_formatted_import.py` keeps one row per case and renames `Step` to
+    `Step Action`.
 
 ## Rules
 

@@ -1,0 +1,52 @@
+name: Pull request preflight
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: preflight-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  preflight:
+    name: Compile, validate, and test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '11'
+          cache: maven
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Compile production and test code
+        run: mvn -B -ntp -DskipTests test-compile
+
+      - name: Parse TestNG suites
+        run: python scripts/validate_testng_suites.py
+
+      - name: Run device-free tests
+        run: >-
+          mvn -B -ntp test
+          -Dtest=com.mobile.swaglabs.qa.retry.RetryAnalyzerDemoTest#testFailsOnceThenPasses+testPassesFirstTime+testFailsOncePerRow
+          -Dretry_count=1
+          -Dreporting.enabled=false
+
+      - name: Verify generated documentation and imports
+        run: |
+          python docs/generate_readme_cases.py --check
+          python docs/generate_zebrunner_import.py --check
+          python docs/test_cases_formatted_import.py --check
